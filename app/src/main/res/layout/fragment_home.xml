@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_25dp"
+    tools:context="val.com.valparked.fragment.HomeFragment">
+
+    <LinearLayout
+        android:id="@+id/llValidate"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/margin_25dp"
+        android:layout_centerHorizontal="true"
+        android:weightSum="5"
+        android:background="@drawable/edittext_shap"
+        >
+
+     <TextView
+         android:id="@+id/tvValidate"
+         android:layout_width="0dp"
+         android:layout_weight="5"
+         style="@style/TextStyleNormal.Large.Bold"
+         android:gravity="center"
+         android:text="VALIDATA CARD"
+         android:layout_height="match_parent" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"/>
+        <ImageView
+            android:layout_toRightOf="@+id/tvValidate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llIssueCard"
+        android:layout_below="@+id/llValidate"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_centerHorizontal="true"
+        android:weightSum="5"
+        android:background="@drawable/edittext_shap"
+        >
+
+        <TextView
+            android:id="@+id/tvIssuedate"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:paddingLeft="@dimen/margin_25dp"
+            android:paddingRight="@dimen/margin_25dp"
+            style="@style/TextStyleNormal.Large.Bold"
+            android:gravity="center"
+            android:text="ISSUCE CARD"
+            android:layout_height="match_parent" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"/>
+        <ImageView
+            android:layout_toRightOf="@+id/tvIssuedate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_launcher"/>
+
+    </LinearLayout>
+
+    
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="val.com.valparked.activity.BaseActivity">
+
+    <FrameLayout
+        android:id="@+id/flFooter"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tvFooter"
+            style="@style/TextStyleNormal.Botton_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragment"
+            android:gravity="center"
+            android:text="NEXT" />
+
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/flFooter"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvPowerBy"
+            style="@style/TextStyleNormal.Small.White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appBar"
+            android:background="@color/dark_blue"
+            android:gravity="center"
+            android:text="@string/powerd_by"
+            android:textColor="@color/white" />
+
+        <FrameLayout
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tvPowerBy"
+            android:layout_centerInParent="true" />
+    </LinearLayout>
+
+</RelativeLayout>
