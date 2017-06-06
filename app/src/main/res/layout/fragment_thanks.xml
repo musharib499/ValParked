@@ -2,12 +2,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding_xlarge"
     tools:context="val.com.valparked.fragment.ThanksFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/tvThank"
+        style="@style/TextStyleNormal.Large35"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/thank_you"
+        android:textColor="@color/green"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        style="@style/TextStyleNormal.Gray"
+        android:layout_below="@+id/tvThank"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_25dp"
+        android:text="@string/your_vehicle_will_be_on_gate_soon" />
+
+    <TextView
+        android:id="@+id/tvCarNo"
+        style="@style/TextStyleNormal.Large30.margin"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/tvMessage" />
+
+
+    <TextView
+        style="@style/TextStyleNormal.Small"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/margin_25dp"
+        android:text="@string/hope_you_enjoyed_here"
+        android:textStyle="italic"
+        android:textColor="@color/green" />
+
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@drawable/reactagular_black"
+        android:padding="@dimen/padding_medium"
+        android:text="OK"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_large30"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/tvCarNo"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="11dp" />
+
 
 </RelativeLayout>

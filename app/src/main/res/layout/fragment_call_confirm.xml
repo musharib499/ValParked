@@ -27,7 +27,7 @@
         android:padding="@dimen/padding_medium">
 
         <Button
-            android:id="@+id/llConfirm"
+            android:id="@+id/btnConfirm"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@drawable/reactagular_green"
@@ -38,7 +38,7 @@
             android:textSize="@dimen/text_size_large30" />
 
         <Button
-            android:id="@+id/llCancel"
+            android:id="@+id/btnCancel"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_medium"

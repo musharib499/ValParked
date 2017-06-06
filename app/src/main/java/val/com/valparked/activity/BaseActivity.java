@@ -245,7 +245,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     @Override
     public void onBackPressed() {
 
-        if (fragmentManager.getBackStackEntryCount() >0) {
+        if (fragmentManager.getBackStackEntryCount()>0) {
             fragmentManager.popBackStack();
         }else
        {

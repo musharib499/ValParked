@@ -77,8 +77,12 @@
     <style name="TextStyleNormal.Large30">
         <item name="android:textSize">@dimen/text_size_large30</item>
     </style>
+    <style name="TextStyleNormal.Large35">
+        <item name="android:textSize">@dimen/text_size_large35</item>
+    </style>
     <style name="TextStyleNormal.Large30.margin">
         <item name="android:layout_margin">@dimen/margin_medium</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextStyleNormal.Small">

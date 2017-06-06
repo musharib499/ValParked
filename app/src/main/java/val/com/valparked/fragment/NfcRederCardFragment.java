@@ -231,7 +231,7 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
 
 
                         if (!TextUtils.isEmpty(callMyCar.vehicalInfo.vehicalNumber))
-                          getFragmentAdapter().addToBackStack(ValidConfirmFragment.newInstance(number));
+                          getFragmentAdapter().addToBackStack(CallConfirmFragment.newInstance(callMyCar.vehicalInfo.vehicalNumber));
                           tvError.setText("");
 
 
