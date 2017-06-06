@@ -1,13 +1,75 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/LayoutHeightWrapWidthMatchStyling.Padding"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="val.com.valparked.fragment.ValidConfirmFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        style="@style/TextStyleNormal.Gray"
+        android:layout_marginTop="@dimen/margin_25dp"
+        android:text="@string/verify_car_no" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvCarNo"
+        style="@style/TextStyleNormal.Large30.margin"
+         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <LinearLayout
+            android:id="@+id/llCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_shap"
+            android:padding="@dimen/padding_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextStyleNormal.Large30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:textColor="@color/light_oragne" />
+
+            <TextView
+                style="@style/TextStyleNormal.Small"
+                android:text="@string/try_another_card"
+                android:textColor="@color/light_oragne" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_medium"
+            android:background="@drawable/reactagular_green"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextStyleNormal.Large30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirm"
+                android:textColor="@color/white" />
+
+            <TextView
+                style="@style/TextStyleNormal.Small"
+                android:text="@string/handover_car_to_customer"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

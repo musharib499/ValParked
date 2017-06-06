@@ -6,24 +6,15 @@
     android:orientation="vertical"
     tools:context="val.com.valparked.activity.BaseActivity">
 
-    <FrameLayout
-        android:id="@+id/flFooter"
+    <Button
+        android:id="@+id/nextButton"
         android:visibility="gone"
+        style="@style/TextStyleNormal.Botton_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <TextView
-            android:id="@+id/tvFooter"
-            style="@style/TextStyleNormal.Botton_Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fragment"
-            android:gravity="center"
-            android:text="NEXT" />
-
-
-    </FrameLayout>
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:text="NEXT"/>
 
 
     <LinearLayout

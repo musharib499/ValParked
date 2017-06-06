@@ -50,9 +50,17 @@
     <style name="TextStyleNormal.Red">
         <item name="android:textColor">@color/red</item>
     </style>
+    <style name="TextStyleNormal.Gray">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="TextStyleNormal.Large">
         <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="TextStyleNormal.Large.Red">
+        <item name="android:textColor">@color/red</item>
     </style>
 
     <style name="LayoutHeightWrapWidthMatchStyling.Button">
@@ -68,6 +76,9 @@
     </style>
     <style name="TextStyleNormal.Large30">
         <item name="android:textSize">@dimen/text_size_large30</item>
+    </style>
+    <style name="TextStyleNormal.Large30.margin">
+        <item name="android:layout_margin">@dimen/margin_medium</item>
     </style>
 
     <style name="TextStyleNormal.Small">

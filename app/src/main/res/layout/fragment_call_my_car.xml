@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    tools:context="val.com.valparked.fragment.IssueCardValidFragment">
+    tools:context="val.com.valparked.fragment.NfcRederCardFragment">
 
     <TextView
         android:id="@+id/tvCarNo"
@@ -26,8 +26,9 @@
 
         <TextView
             android:id="@+id/tvShow"
-            style="@style/TextStyleNormal.Red"
-            android:text="Show Card"
+            style="@style/TextStyleNormal.Large"
+
+            android:text="@string/show_card"
             />
 
         <ImageView
@@ -40,8 +41,8 @@
 
         <TextView
             android:id="@+id/tvError"
-            style="@style/TextStyleNormal.Small.Red"
-            android:text="Show Card" />
+            style="@style/TextStyleNormal.Red"
+            tools:text="Show Card" />
 
     </LinearLayout>
 

@@ -29,6 +29,18 @@
     <string name="error">Error</string>
     <string name="no_nfc">No NFC found on this device</string>
     <string name="nfc_disabled">NFC is not enabled. Please go to the wireless settings to enable it.</string>
+    <string name="verify_car_no">Please verify the Car No.</string>
+    <string name="cancel">CANCEL</string>
+    <string name="show_card">Show Card </string>
+    <string name="show_valet_card">Show Valet Card </string>
+    <string name="show_card_here">Show Card here</string>
+    <string name="call_car">CALL YOU CAR</string>
+    <string name="card_not_found">Card not found. Please try again</string>
+    <string name="try_another_card">Try another Card</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="handover_car_to_customer">Handover car to customer</string>
+    <string name="is_ready_to_call">is ready to call</string>
+    <string name="your_vehicle_with_no">Your vehicle with no.</string>
 
 
 </resources>

@@ -1,9 +1,9 @@
-package val.com.valparked.fragment;
+package val.com.valparked.nfcReader;
 
-
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -16,115 +16,44 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.widget.Toast;
 
 import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import val.com.valparked.R;
-import val.com.valparked.nfcReader.NdefMessageParser;
-import val.com.valparked.nfcReader.ParsedNdefRecord;
+import val.com.valparked.activity.BaseActivity;
+import val.com.valparked.activity.HomeActivity;
+import val.com.valparked.intarface.UpdateUIAdapter;
+import val.com.valparked.utils.Constant;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link IssueCardValidFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by User on 6/3/2017.
  */
-public class IssueCardValidFragment extends BaseFragment {
-    private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
-    private static final DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
-    private LinearLayout mTagContent;
 
-    private NfcAdapter mAdapter;
-    private PendingIntent mPendingIntent;
-    private NdefMessage mNdefPushMessage;
+public class NfcReader {
 
-    private AlertDialog mDialog;
-    private TextView tvTag;
-    private List<Tag> mTags = new ArrayList<Tag>();
+    private Tag tag;
+    private static NfcReader nfcReader= null;
+    private Context mContext;
 
-
-
-    public IssueCardValidFragment() {
-        // Required empty public constructor
+    private NfcReader(Context context) {
+        this.mContext=context;
     }
 
-    public static IssueCardValidFragment newInstance(String param1) {
-        IssueCardValidFragment fragment = new IssueCardValidFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
-        resolveIntent(getActivity().getIntent());
-        nfcAdapter();
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_issue_card_valid, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        LinearLayout llShowCard=(LinearLayout) view.findViewById(R.id.llShowCard);
-        tvTag=(TextView) view.findViewById(R.id.tvCarNo);
-        llShowCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nfcAdapter();
-                if (mAdapter != null) {
-                    if (!mAdapter.isEnabled()) {
-                        showWirelessSettingsDialog();
-                    }
-                    mAdapter.enableForegroundDispatch(getActivity(), mPendingIntent, null, null);
-                    mAdapter.enableForegroundNdefPush(getActivity(), mNdefPushMessage);
-                }
-            }
-        });
-
-    }
-
-    public void nfcAdapter()
+    public static synchronized NfcReader getInstance(Context context)
     {
-
-        mAdapter = NfcAdapter.getDefaultAdapter(getActivity());
-        if (mAdapter == null) {
-            showMessage(R.string.error, R.string.no_nfc);
-            getActivity().finish();
-            return;
-        }
-
-        mPendingIntent = PendingIntent.getActivity(getActivity(), 0,
-                new Intent(getActivity(), getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        mNdefPushMessage = new NdefMessage(new NdefRecord[] { newTextRecord(
-                "Message from NFC Reader :-)", Locale.ENGLISH, true) });
-
+        if (nfcReader==null)
+            return new NfcReader(context);
+        else
+            return nfcReader;
     }
-    private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
+
+
+
+    public NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
 
         Charset utfEncoding = encodeInUtf8 ? Charset.forName("UTF-8") : Charset.forName("UTF-16");
@@ -140,53 +69,7 @@ public class IssueCardValidFragment extends BaseFragment {
 
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
     }
-    private void showMessage(int title, int message) {
-        mDialog.setTitle(title);
-        mDialog.setMessage(getText(message));
-        mDialog.show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdapter != null) {
-            if (!mAdapter.isEnabled()) {
-                showWirelessSettingsDialog();
-            }
-            mAdapter.enableForegroundDispatch(getActivity(), mPendingIntent, null, null);
-            mAdapter.enableForegroundNdefPush(getActivity(), mNdefPushMessage);
-        }
-        tvTag.setText(getIdsHex());
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mAdapter != null) {
-            mAdapter.disableForegroundDispatch(getActivity());
-            mAdapter.disableForegroundNdefPush(getActivity());
-        }
-    }
-
-    private void showWirelessSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.nfc_disabled);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                getActivity().finish();
-            }
-        });
-        builder.create().show();
-        return;
-    }
-    private void resolveIntent(Intent intent) {
+    public void resolveIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
@@ -202,17 +85,24 @@ public class IssueCardValidFragment extends BaseFragment {
                 // Unknown tag type
                 byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-                Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] payload = dumpTagData(tag).getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };
-                mTags.add(tag);
+                //mTags.add(tag);
+                if (tag!=null)
+                {
+                    ((HomeActivity)mContext).setTag(toHex(tag.getId()).replace(" ", ""));
+                }
+
+
             }
             // Setup the views
-            buildTagViews(msgs);
+            //tvTag.setText(msgs.toString());
         }
     }
+
     private String dumpTagData(Tag tag) {
         StringBuilder sb = new StringBuilder();
         byte[] id = tag.getId();
@@ -287,9 +177,10 @@ public class IssueCardValidFragment extends BaseFragment {
                 sb.append(type);
             }
         }
-Log.e("MUSHA",sb.toString());
+
         return sb.toString();
     }
+
     private Tag cleanupTag(Tag oTag) {
         if (oTag == null)
             return null;
@@ -377,6 +268,7 @@ Log.e("MUSHA",sb.toString());
 
         return nTag;
     }
+
     private String toHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (int i = bytes.length - 1; i >= 0; --i) {
@@ -388,8 +280,6 @@ Log.e("MUSHA",sb.toString());
                 sb.append(" ");
             }
         }
-        Log.e("toHex",sb.toString());
-        tvTag.setText(sb.toString());
         return sb.toString();
     }
 
@@ -404,8 +294,6 @@ Log.e("MUSHA",sb.toString());
                 sb.append('0');
             sb.append(Integer.toHexString(b));
         }
-
-        Log.e("toReversedHex",sb.toString());
         return sb.toString();
     }
 
@@ -417,7 +305,6 @@ Log.e("MUSHA",sb.toString());
             result += value * factor;
             factor *= 256l;
         }
-        Log.e("toDec",""+result);
         return result;
     }
 
@@ -432,11 +319,11 @@ Log.e("MUSHA",sb.toString());
         return result;
     }
 
-    void buildTagViews(NdefMessage[] msgs) {
+   /* void buildTagViews(NdefMessage[] msgs) {
         if (msgs == null || msgs.length == 0) {
             return;
         }
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout content = mTagContent;
 
         // Parse the first message in the list
@@ -445,57 +332,66 @@ Log.e("MUSHA",sb.toString());
         List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
         final int size = records.size();
         for (int i = 0; i < size; i++) {
-            TextView timeView = new TextView(getActivity());
+            TextView timeView = new TextView(this);
             timeView.setText(TIME_FORMAT.format(now));
             content.addView(timeView, 0);
             ParsedNdefRecord record = records.get(i);
-            content.addView(record.getView(getActivity(), inflater, content, i), 1 + i);
+            content.addView(record.getView(this, inflater, content, i), 1 + i);
             content.addView(inflater.inflate(R.layout.tag_divider, content, false), 2 + i);
         }
+    }*/
+
+    public String getIdsHex() {
+        if (tag!=null)
+       return toHex(tag.getId()).replace(" ", "");
+        else
+            return null;
+
     }
 
-    private String getIdsHex() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toHex(tag.getId()));
-            builder.append('\n');
+    public String getIdsReversedHex() {
+        if (tag!=null)
+            return toReversedHex(tag.getId()).replace(" ", "");
+        else
+            return null;
+      /*  builder.append(toReversedHex(tag.getId()));
+         *//*   builder.append('\n');
         }
-        //builder.setLength(builder.length() - 1); // Remove last new line
-        Log.e("MU",builder.toString().replace(" ", ""));
-        return builder.toString().replace(" ", "");
+        builder.setLength(builder.length() - 1);*//* // Remove last new line
+        return builder.toString().replace(" ", "");*/
     }
 
-    private String getIdsReversedHex() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toReversedHex(tag.getId()));
-            builder.append('\n');
+    public String getIdsDec() {
+
+        if (tag!=null) {
+            StringBuilder builder = new StringBuilder();
+            return builder.append(toDec(tag.getId())).toString();
         }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString().replace(" ", "");
-    }
-
-    private String getIdsDec() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toDec(tag.getId()));
-            builder.append('\n');
+        else
+            return null;
+      /*  StringBuilder builder = new StringBuilder();
+       *//* for (Tag tag : mTags) {*//*
+        builder.append(toDec(tag.getId()));
+        *//*    builder.append('\n');
         }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString();
+        builder.setLength(builder.length() - 1);*//* // Remove last new line
+        return builder.toString();*/
     }
 
-    private String getIdsReversedDec() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toReversedDec(tag.getId()));
-            builder.append('\n');
+    public String getIdsReversedDec() {
+        if (tag!=null) {
+            StringBuilder builder = new StringBuilder();
+            return builder.append(toReversedDec(tag.getId())).toString();
         }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString();
+        else
+            return null;
+       /* StringBuilder builder = new StringBuilder();
+        builder.append(toReversedDec(tag.getId()));
+          *//*  builder.append('\n');
+        }
+        builder.setLength(builder.length() - 1);*//* // Remove last new line
+        return builder.toString();*/
     }
-
-
 
 
 }

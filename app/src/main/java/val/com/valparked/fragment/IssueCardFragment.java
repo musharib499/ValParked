@@ -2,10 +2,13 @@ package val.com.valparked.fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import val.com.valparked.R;
 import val.com.valparked.utils.Constant;
@@ -30,7 +33,6 @@ public class IssueCardFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentAdapter().setTitleMessage("Issue Card");
-        getFragmentAdapter().setFooter("NEXT",true, Constant.IssueCardValidFrament);
 
     }
 
@@ -40,4 +42,21 @@ public class IssueCardFragment extends BaseFragment {
         return inflater.inflate(R.layout.fragment_issue_card, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final EditText editText=(EditText) view.findViewById(R.id.etCarNo);
+        getFragmentAdapter().setFooter("NEXT",true).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(editText.getText().toString())) {
+                    getFragmentAdapter().addToBackStack(NfcRederCardFragment.newInstance(editText.getText().toString(), Constant.IssueCardFragment));
+                }else {
+                    editText.setError("Please enter car Number ");
+                }
+            }
+        });
+
+    }
 }

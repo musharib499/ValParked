@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import val.com.valparked.R;
+import val.com.valparked.utils.Constant;
 
 public class HomeFragment extends BaseFragment {
     public HomeFragment() {
@@ -44,9 +45,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getFragmentAdapter().setTitleMessage("Home");
+        getFragmentAdapter().navigationLockShowBackArrow(false,"Home");
         getFragmentAdapter().setFooter("",false);
-        getFragmentAdapter().setNavigation();
     }
 
     @Override
@@ -54,10 +54,10 @@ public class HomeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         LinearLayout llValiDate= (LinearLayout) view.findViewById(R.id.llValidate);
         LinearLayout llIssueDate= (LinearLayout) view.findViewById(R.id.llIssueCard);
-        llIssueDate.setOnClickListener(new View.OnClickListener() {
+        llValiDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentAdapter().addToBackStack(ValidShowCardFragment.newInstance());
+                getFragmentAdapter().addToBackStack(NfcRederCardFragment.newInstance("", Constant.CardValidFragment));
             }
         });
         llIssueDate.setOnClickListener(new View.OnClickListener() {
