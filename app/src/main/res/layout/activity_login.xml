@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,6 +40,34 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="@dimen/padding_large" />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/radioVelet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimary"
+                app:buttonTint="@color/gray"
+                android:text="Velet" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/radioMaster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:buttonTint="@color/gray"
+                android:textColor="@color/colorPrimary"
+                android:text="Parking Master" />
+        </RadioGroup>
 
         <Button
             android:id="@+id/btnLogin"

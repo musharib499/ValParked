@@ -3,35 +3,60 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+    signingConfigs {
+        dev {
+            keyAlias 'VelParked'
+            keyPassword '123456789'
+            storeFile file('src/main/java/velParked.jks')
+            storePassword '123456789'
+        }
+
+        release {
+            keyAlias 'VelParked'
+            keyPassword '123456789'
+            storeFile file('src/main/java/velParked.jks')
+            storePassword '123456789'
+        }
+    }
     defaultConfig {
         applicationId "val.com.valparked"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            debuggable true
+            buildConfigField "String", "REST_HOST", project.DEBUG_URL
+            multiDexEnabled true
+            applicationIdSuffix ".dev"
+            signingConfig signingConfigs.dev
+        }
+        release {
+            minifyEnabled true
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "REST_HOST", "http://smartplaykids.com/parking/application/"
+            buildConfigField "String", "REST_HOST", project.DEBUG_URL
+            multiDexEnabled true
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile files('libs/guavalib.jar')
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.google.code.gson:gson:2.6.1'
+
+    // Retrofit2 + Gson
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
 }

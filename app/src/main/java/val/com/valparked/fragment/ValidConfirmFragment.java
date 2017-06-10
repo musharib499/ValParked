@@ -17,7 +17,7 @@ import val.com.valparked.R;
  * Use the {@link ValidConfirmFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ValidConfirmFragment extends Fragment implements View.OnClickListener {
+public class ValidConfirmFragment extends BaseFragment implements View.OnClickListener {
     private String carNo="";
     private static final String ARG_PARAM1 ="param" ;
 
@@ -70,7 +70,7 @@ public class ValidConfirmFragment extends Fragment implements View.OnClickListen
                 getActivity().onBackPressed();
                 break;
             case R.id.llConfirm:
-
+               getFragmentAdapter().clearFragment();
                 break;
             default:
                 break;

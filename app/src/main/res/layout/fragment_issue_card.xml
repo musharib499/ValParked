@@ -12,7 +12,7 @@
       android:layout_marginTop="@dimen/margin_25dp"
       android:layout_marginRight="@dimen/margin_20dp"
       android:layout_marginLeft="@dimen/margin_20dp"
-      android:inputType="text|number"
+      android:inputType="textCapCharacters"
       android:maxLength="12"
       android:background="@drawable/edittext_shap"
       android:padding="@dimen/padding_large"

@@ -15,22 +15,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.MenuItem;
 
-import java.util.HashMap;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import val.com.valparked.R;
 import val.com.valparked.fragment.HomeFragment;
 import val.com.valparked.fragment.IssueCardFragment;
 import val.com.valparked.fragment.NfcRederCardFragment;
 import val.com.valparked.intarface.UpdateUIAdapter;
-import val.com.valparked.model.BaseResponseModel;
 import val.com.valparked.nfcReader.NfcReader;
-import val.com.valparked.retrofit.RestApiCalls;
 import val.com.valparked.utils.Constant;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +34,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private PendingIntent mPendingIntent;
     private NdefMessage mNdefPushMessage;
     private AlertDialog mDialog;
-    private Context context=this;
+    private Context context = this;
     private DrawerLayout drawer;
     private UpdateUIAdapter uiAdapter;
 
@@ -78,29 +73,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         } else if (id == R.id.nav_issue_card) {
 
-            addToBackStack(IssueCardFragment.newInstance());
+            replaceFragment(IssueCardFragment.newInstance());
         } else if (id == R.id.nav_call_my_car) {
-              replaceFragment(NfcRederCardFragment.newInstance("", Constant.CallValidFragment));
-        } else if (id == R.id.nav_logout) {
+            replaceFragment(NfcRederCardFragment.newInstance("", Constant.CallValidFragment));
+        } /*else if (id == R.id.nav_logout) {
             setLogOut();
 
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-public void setTag(String tag)
-{
-      uiAdapter.setTagValue(tag);
-}
+    public void setTag(String tag) {
+        if (!TextUtils.isEmpty(tag))
+            uiAdapter.setTagValue(tag);
+    }
 
 
     @Override
     protected void onResume() {
         super.onResume();
         setNavigation();
+        setNavigationHeader(navigationView);
 
         //navigationView.setVisibility(View.VISIBLE);
     }
@@ -134,11 +130,13 @@ public void setTag(String tag)
             mAdapter.enableForegroundNdefPush(context, mNdefPushMessage);
         }
     }
+
     private void showMessage(int title, int message) {
         mDialog.setTitle(title);
         mDialog.setMessage(getText(message));
         mDialog.show();
     }
+
     private void showWirelessSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.nfc_disabled);
@@ -156,6 +154,7 @@ public void setTag(String tag)
         builder.create().show();
         return;
     }
+
     @Override
     public void setStartNfc(Activity context) {
         super.setStartNfc(context);
@@ -171,33 +170,8 @@ public void setTag(String tag)
         }
         mPendingIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        mNdefPushMessage = new NdefMessage(new NdefRecord[] { NfcReader.getInstance(this).newTextRecord(
-                "Message from NFC Reader :-)", Locale.ENGLISH, true) });
-    }
-
-    private void setLogOut()
-    {
-        HashMap<String,String> params = new HashMap<>();
-        params.put(Constant.USER_ID,getValApplication().getLoginResponse().getUserDetails().getUserid());
-        RestApiCalls.getLogOut(params).enqueue(new Callback<BaseResponseModel>() {
-            @Override
-            public void onResponse(Call<BaseResponseModel> call, Response<BaseResponseModel> response) {
-                if (response.isSuccessful()&& response.body()!=null) {
-                    BaseResponseModel responseModel = response.body();
-                    if (responseModel.getStatus()) {
-                      getValApplication().getComplexPreference().removeObject(Constant.LOGIN_KEY);
-                        startActivity(new Intent(HomeActivity.this,LoginActivity.class));
-                        finish();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponseModel> call, Throwable t) {
-
-            }
-        });
+        mNdefPushMessage = new NdefMessage(new NdefRecord[]{NfcReader.getInstance(this).newTextRecord(
+                "Message from NFC Reader :-)", Locale.ENGLISH, true)});
     }
 
 

@@ -8,6 +8,7 @@ import retrofit2.http.QueryMap;
 import val.com.valparked.model.BaseResponseModel;
 import val.com.valparked.model.CallMyCar;
 import val.com.valparked.model.Login;
+import val.com.valparked.model.Parking;
 import val.com.valparked.model.ValidCardInfo;
 
 /**
@@ -17,6 +18,7 @@ public interface RetrofitInterface {
 
     @GET("login.php")
     Call<Login> getLogin(@QueryMap Map<String, String> params);
+
     @GET("logout.php")
     Call<BaseResponseModel> getLogOut(@QueryMap Map<String, String> params);
 
@@ -28,6 +30,9 @@ public interface RetrofitInterface {
 
     @GET("validate_card.php")
     Call<ValidCardInfo> getValidCard(@QueryMap Map<String, String> params);
+
+    @GET("parking_status.php")
+    Call<Parking> getParking(@QueryMap Map<String, String> params);
 
    /* @GET("startup/{dealerId}")
     Call<StartupApiModel> getStartup(@Path("dealerId") String dealerId);

@@ -14,6 +14,9 @@ public class UserDetails implements Parcelable
     private String email;
     private String phone;
     private String address;
+
+
+    private String userType;
     public final static Parcelable.Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
 
 
@@ -28,6 +31,7 @@ public class UserDetails implements Parcelable
             instance.email = ((String) in.readValue((String.class.getClassLoader())));
             instance.phone = ((String) in.readValue((String.class.getClassLoader())));
             instance.address = ((String) in.readValue((String.class.getClassLoader())));
+            instance.userType = ((String) in.readValue((String.class.getClassLoader())));
             return instance;
         }
 
@@ -35,8 +39,17 @@ public class UserDetails implements Parcelable
             return (new UserDetails[size]);
         }
 
+    };
+
+
+    public String getUserType() {
+        return userType;
     }
-            ;
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
 
     public String getUserid() {
         return userid;
@@ -93,6 +106,8 @@ public class UserDetails implements Parcelable
         dest.writeValue(email);
         dest.writeValue(phone);
         dest.writeValue(address);
+        dest.writeValue(userType);
+
     }
 
     public int describeContents() {

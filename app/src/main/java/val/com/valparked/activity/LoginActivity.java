@@ -4,12 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -25,47 +29,73 @@ import val.com.valparked.utils.ComplexPreferences;
 import val.com.valparked.utils.Constant;
 import val.com.valparked.utils.Utils;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class LoginActivity extends BaseActivity {
-    private static final String TAG =LoginActivity.class.getName() ;
+    private static final String TAG = LoginActivity.class.getName();
     private TextView tvVersion;
     private EditText edUserId;
     private EditText edUserPass;
     private Button btnLogin;
-    private Context context=this;
+    private Context context = this;
+    private RadioGroup radioGroup;
+    private RadioButton rbValet, rbMaster;
+
 
     private ValApplication valApplication;
     private ComplexPreferences complexPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        valApplication=getValApplication();
+        valApplication = getValApplication();
         complexPreferences = getValApplication().getComplexPreference();
 
         onView();
     }
 
-    public void onView()
-    {
-        tvVersion=(TextView) findViewById(R.id.tvVersion);
-        edUserId=(EditText) findViewById(R.id.edUserId);
-        edUserPass=(EditText) findViewById(R.id.edPassword);
-        btnLogin=(Button) findViewById(R.id.btnLogin);
+    public void onView() {
+        tvVersion = (TextView) findViewById(R.id.tvVersion);
+        edUserId = (EditText) findViewById(R.id.edUserId);
+        edUserPass = (EditText) findViewById(R.id.edPassword);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        rbValet = (RadioButton) findViewById(R.id.radioVelet);
+        rbMaster = (RadioButton) findViewById(R.id.radioMaster);
+
+
         onClickView();
         setValue();
     }
-    public void setValue()
-    {
-        tvVersion.setText("Version "+BuildConfig.VERSION_NAME);
+
+    public void setValue() {
+        tvVersion.setText("Version " + BuildConfig.VERSION_NAME);
     }
-    void onClickView()
-    {
+
+    void onClickView() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isConnected(context))
-                    buildDialog(context);
-                    else setLogin(edUserId.getText().toString(),edUserId.getText().toString(),"0");
+                if (isConnected(context)){
+                    if (!TextUtils.isEmpty(edUserId.getText().toString()) && !TextUtils.isEmpty(edUserPass.getText().toString())) {
+                        String userType = "0";
+                        if (radioGroup.getCheckedRadioButtonId() == rbValet.getId()) {
+                            userType = "0";
+                        } else if (radioGroup.getCheckedRadioButtonId() == rbMaster.getId()) {
+                            userType = "1";
+                        }
+
+                        setLogin(edUserId.getText().toString(), edUserId.getText().toString(), userType);
+                    }else {
+                        if (TextUtils.isEmpty(edUserId.getText().toString()))
+                             edUserId.setError("Please user id");
+
+                        if (TextUtils.isEmpty(edUserPass.getText().toString()))
+                        edUserPass.setError("Please  password");
+                    }
+                }
+
             }
         });
     }
@@ -75,6 +105,7 @@ public class LoginActivity extends BaseActivity {
         super.onResume();
 
     }
+
     @SuppressLint("InlinedApi")
     private void show() {
         btnLogin.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -85,38 +116,41 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    public void setLogin(String userName,String password,String userType)
-    {
-        HashMap<String,String> params = new HashMap<>();
-        params.put(Constant.USERNAME,userName);
-        params.put(Constant.PASSWORD,password);
+    public void setLogin(String userName, String password, final String userType) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.USERNAME, userName);
+        params.put(Constant.PASSWORD, password);
         params.put(Constant.USER_TYPE, userType);
         params.put(Constant.DEVICE_ID, Utils.getDeviceId(this));
-
-        requestProgress("Login","Please wait ...");
+        Log.e(TAG,params.toString());
+        requestProgress("Login", "Please wait ...");
         RestApiCalls.getLogin(params).enqueue(new Callback<Login>() {
             @Override
             public void onResponse(Call<Login> call, Response<Login> response) {
+                hideProgress();
+                if (response.isSuccessful() && response.body() != null) {
 
-                if (response.isSuccessful() && response.body()!=null)
-                {
-                    hideProgress();
-                    Login login=response.body();
-                    if (login.getStatus()&& login.getUserDetails()!=null)
-                    {
+                    Login login = response.body();
+                    if (login.getStatus() && login.getUserDetails() != null) {
 
 
                         valApplication.setLoginResponse(login);
-                        Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
-                        startActivity(intent);
+                        if (userType.equalsIgnoreCase("0")) {
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (userType.equalsIgnoreCase("1")) {
+                            Intent intent = new Intent(LoginActivity.this, MasterActivity.class);
+                            startActivity(intent);
+                            finish();
+                       }
 
 
+                    } else {
+                        Toast.makeText(context, login.getMessage(),LENGTH_SHORT).show();
                     }
-                    else {
-                        Log.e(TAG,"status fails");
-                    }
-                }else {
-                    Log.e(TAG,"No Record");
+                } else {
+                    Toast.makeText(context,response.message() ,LENGTH_SHORT).show();
 
                 }
 
@@ -124,7 +158,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
-                Log.e(TAG,"fail");
+                hideProgress();
+                Toast.makeText(context, t.getMessage(),LENGTH_SHORT).show();
             }
         });
 

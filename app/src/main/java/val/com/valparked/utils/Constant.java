@@ -14,6 +14,7 @@ public class Constant {
     public static final String USERNAME="username";
     public static final String PASSWORD="password";
     public static final String USER_TYPE="user_type";
+    public static final String USERTYPE="userType";
     public static final String DEVICE_ID="device_id";
     public static final String DEVICE_FID="device_fid";
     public static final String USER_ID="userid";

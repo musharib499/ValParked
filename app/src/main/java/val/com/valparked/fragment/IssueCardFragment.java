@@ -32,7 +32,14 @@ public class IssueCardFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentAdapter().setTitleMessage("Issue Card");
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFragmentAdapter().navigationLockShowBackArrow(false,"Issue Card");
 
     }
 
@@ -52,6 +59,7 @@ public class IssueCardFragment extends BaseFragment {
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(editText.getText().toString())) {
                     getFragmentAdapter().addToBackStack(NfcRederCardFragment.newInstance(editText.getText().toString(), Constant.IssueCardFragment));
+                    editText.setText("");
                 }else {
                     editText.setError("Please enter car Number ");
                 }

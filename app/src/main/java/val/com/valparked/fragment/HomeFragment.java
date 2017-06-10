@@ -3,10 +3,12 @@ package val.com.valparked.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import val.com.valparked.R;
 import val.com.valparked.utils.Constant;
@@ -32,6 +34,7 @@ public class HomeFragment extends BaseFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);*/
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

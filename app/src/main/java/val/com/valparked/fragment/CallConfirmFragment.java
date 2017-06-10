@@ -57,6 +57,12 @@ public class CallConfirmFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getFragmentAdapter().navigationLockShowBackArrow(true,"Confirm");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

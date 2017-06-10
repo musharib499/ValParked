@@ -26,4 +26,5 @@ public interface FragmentAdapter {
     void buildDialog(Context context);
     ValApplication getValApplication();
     void navigationLockShowBackArrow(boolean NotShow, String titleMessage);
+    void clearFragment();
 }

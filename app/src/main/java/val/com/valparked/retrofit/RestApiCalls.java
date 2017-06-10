@@ -2,12 +2,15 @@ package val.com.valparked.retrofit;
 
 import java.util.HashMap;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import val.com.valparked.model.BaseResponseModel;
 import val.com.valparked.model.CallMyCar;
 import val.com.valparked.model.Login;
+import val.com.valparked.model.Parking;
 import val.com.valparked.model.ValidCardInfo;
 
 
@@ -21,11 +24,18 @@ public class RestApiCalls {
     private static Retrofit retrofit = null;
     private static RetrofitInterface retrofitInterface = null;
 
+
     public static RetrofitInterface getRetrofitApi() {
         if (retrofitInterface == null) {
+            HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
+            logger.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+          OkHttpClient  mHttpClient = new OkHttpClient.Builder().addInterceptor(logger).build();
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(REST_HOST)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(mHttpClient)
                     .build();
             retrofitInterface = retrofit.create(RetrofitInterface.class);
         }
@@ -47,6 +57,9 @@ public class RestApiCalls {
     }
     public static Call<ValidCardInfo> getValidCard(HashMap<String, String> params) {
         return getRetrofitApi().getValidCard(params);
+    }
+    public static Call<Parking> getParking(HashMap<String, String> params) {
+        return getRetrofitApi().getParking(params);
     }
 
 

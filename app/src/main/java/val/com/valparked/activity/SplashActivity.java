@@ -3,6 +3,7 @@ package val.com.valparked.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -19,29 +20,46 @@ public class SplashActivity extends BaseActivity {
     private View mContentView;
     private ComplexPreferences complexPreferences;
     private ValApplication valApplication;
+    private final int SPLASH_DISPLAY_LENGTH = 1000;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        show();
         setContentView(R.layout.activity_fullscreen);
-        valApplication=getValApplication();
+        valApplication = getValApplication();
 
-        complexPreferences=valApplication.getComplexPreference();
+        complexPreferences = valApplication.getComplexPreference();
 
         mContentView = findViewById(R.id.fullscreen_content);
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                Login login = valApplication.getLoginResponse();
+                if (login != null) {
 
-        Login login=valApplication.getLoginResponse();
-        if (login!=null)
-        {
-            Intent intent=new Intent(SplashActivity.this,HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }else {
-            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+                    if (login.getUserDetails().getUserType().equalsIgnoreCase("0")) {
+                        Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else if (login.getUserDetails().getUserType().equalsIgnoreCase("1")) {
+                        Intent intent = new Intent(SplashActivity.this, MasterActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+
+
 
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,16 +73,12 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        show();
     }
 
     @SuppressLint("InlinedApi")
     private void show() {
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
     }
 

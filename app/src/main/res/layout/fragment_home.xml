@@ -29,9 +29,10 @@
             android:background="@color/gray"/>
         <ImageView
             android:layout_toRightOf="@+id/tvValidate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrowup"/>
 
     </LinearLayout>
     <LinearLayout
@@ -49,8 +50,6 @@
             android:id="@+id/tvIssuedate"
             android:layout_width="0dp"
             android:layout_weight="5"
-            android:paddingLeft="@dimen/margin_25dp"
-            android:paddingRight="@dimen/margin_25dp"
             style="@style/TextStyleNormal.Large.Bold"
             android:gravity="center"
             android:text="ISSUCE CARD"
@@ -60,10 +59,11 @@
             android:layout_height="match_parent"
             android:background="@color/gray"/>
         <ImageView
-            android:layout_toRightOf="@+id/tvIssuedate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_toRightOf="@+id/tvValidate"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrowdown"/>
 
     </LinearLayout>
 

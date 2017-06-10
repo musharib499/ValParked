@@ -18,7 +18,7 @@ import val.com.valparked.R;
  * Use the {@link ThanksFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ThanksFragment extends Fragment {
+public class ThanksFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "vehicleNumber";
     private String vehicleNumber;
 
@@ -43,6 +43,13 @@ public class ThanksFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getFragmentAdapter().navigationLockShowBackArrow(true,"Thanks");
+        getFragmentAdapter().setFooter("",false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -54,6 +61,12 @@ public class ThanksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvCarNo= (TextView) view.findViewById(R.id.tvCarNo);
+        ((Button)view.findViewById(R.id.btnOk)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentAdapter().clearFragment();
+            }
+        });
         if (!TextUtils.isEmpty(vehicleNumber))
             tvCarNo.setText(vehicleNumber);
     }

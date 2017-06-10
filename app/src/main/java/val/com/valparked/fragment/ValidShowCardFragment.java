@@ -28,7 +28,7 @@ public class ValidShowCardFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentAdapter().setTitleMessage("ValiDate Card");
+        getFragmentAdapter().navigationLockShowBackArrow(true,"Validate Card");
     }
 
     @Override

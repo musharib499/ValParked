@@ -44,6 +44,10 @@
     <string name="thank_you">Thank You</string>
     <string name="hope_you_enjoyed_here">Hope you enjoyed here....!</string>
     <string name="your_vehicle_will_be_on_gate_soon">Your vehicle will be on gate soon</string>
+    <string name="dot_string">--:--</string>
+    <string name="in">In :</string>
+    <string name="req">Req :</string>
+    <string name="out">Out :</string>
 
 
 </resources>

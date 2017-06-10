@@ -22,10 +22,10 @@ public class ValApplication extends Application {
 
     }
     public Login getLoginResponse() {
-        if (login == null) {
+        if (login == null ) {
             login = complexPreferences.getObject(Constant.LOGIN_KEY, Login.class);
         }
-        return login;
+        return login!=null ?login :null ;
     }
 
 

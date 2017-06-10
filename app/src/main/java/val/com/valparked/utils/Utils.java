@@ -8,8 +8,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.widget.LinearLayout;
 
 import val.com.valparked.R;
 
@@ -68,5 +72,18 @@ public class Utils {
         }
 
         return deviceId;
+    }
+
+    public static RecyclerView recyclerView(RecyclerView recyclerView, Context context, boolean orientation) {
+        LinearLayoutManager recycler_layout = new LinearLayoutManager(context);
+        if (orientation)
+            recycler_layout.setOrientation(LinearLayout.VERTICAL);
+        else
+            recycler_layout.setOrientation(LinearLayout.HORIZONTAL);
+
+        recyclerView.setLayoutManager(recycler_layout);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        return recyclerView;
     }
 }
