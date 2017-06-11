@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="val.com.valparked.activity.HomeActivity">
+    tools:context="val.com.velparked.activity.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="val.com.valparked">
+    package="val.com.velparked">
 
     <uses-permission android:name="android.permission.NFC" />
 
@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".application.ValApplication"
+        android:name="val.com.velparked.application.ValApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="val.com.velparked.activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:label="@string/app_name"
@@ -29,23 +29,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.HomeActivity"
+            android:name="val.com.velparked.activity.HomeActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="val.com.velparked.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activity.CardReaderActivity"
+            android:name="val.com.velparked.activity.CardReaderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.MasterActivity"
+            android:name="val.com.velparked.activity.MasterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

@@ -9,7 +9,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="val.com.valparked.activity.MasterActivity" />
+        tools:context="val.com.velparked.activity.MasterActivity" />
 
     <TextView
         android:id="@+id/empty_view"

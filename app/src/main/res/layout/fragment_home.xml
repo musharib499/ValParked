@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_25dp"
-    tools:context="val.com.valparked.fragment.HomeFragment">
+    tools:context="val.com.velparked.fragment.HomeFragment">
 
     <LinearLayout
         android:id="@+id/llValidate"
@@ -12,6 +12,7 @@
         android:layout_marginTop="@dimen/margin_25dp"
         android:layout_centerHorizontal="true"
         android:weightSum="5"
+        android:paddingRight="-5dp"
         android:background="@drawable/edittext_shap"
         >
 
@@ -21,12 +22,9 @@
          android:layout_weight="5"
          style="@style/TextStyleNormal.Large.Bold"
          android:gravity="center"
-         android:text="VALIDATA CARD"
+         android:inputType="textCapCharacters"
+         android:text="@string/validate_card"
          android:layout_height="match_parent" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray"/>
         <ImageView
             android:layout_toRightOf="@+id/tvValidate"
             android:layout_width="70dp"
@@ -43,6 +41,7 @@
         android:layout_marginTop="@dimen/margin_medium"
         android:layout_centerHorizontal="true"
         android:weightSum="5"
+        android:paddingRight="-5dp"
         android:background="@drawable/edittext_shap"
         >
 
@@ -52,12 +51,9 @@
             android:layout_weight="5"
             style="@style/TextStyleNormal.Large.Bold"
             android:gravity="center"
-            android:text="ISSUCE CARD"
+            android:inputType="textCapCharacters"
+            android:text="@string/issue_card"
             android:layout_height="match_parent" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray"/>
         <ImageView
             android:layout_toRightOf="@+id/tvValidate"
             android:layout_width="70dp"

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/padding_xlarge"
     android:layout_gravity="center"
-    tools:context="val.com.valparked.fragment.ThanksFragment">
+    tools:context="val.com.velparked.fragment.ThanksFragment">
 
     <TextView
         android:id="@+id/tvThank"

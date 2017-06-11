@@ -22,7 +22,7 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
 
-        <LinearLayout
+   <!--     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -34,19 +34,18 @@
                 android:id="@+id/btnLogout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
                 android:text="@string/logout"
-                android:layout_margin="@dimen/margin_medium"
-                android:background="@drawable/button_shap"/>
+                android:background="@drawable/button_shap"/>-->
 
             <TextView
                 android:id="@+id/tvVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_gravity="center_horizontal|bottom"
                 android:text="Version Code" />
 
-        </LinearLayout>
+      <!--  </LinearLayout>-->
 
     </app:android.support.design.widget.NavigationView>
 

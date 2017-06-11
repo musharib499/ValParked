@@ -14,9 +14,9 @@
         <item
             android:id="@+id/nav_call_my_car"
             android:title="@string/call_my_car" />
-     <!--   <item
+        <item
             android:id="@+id/nav_logout"
-            android:title="@string/logout" />-->
+            android:title="@string/logout" />
     </group>
 
 </menu>

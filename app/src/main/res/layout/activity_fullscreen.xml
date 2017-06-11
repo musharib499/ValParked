@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue"
     style="@style/AppTheme"
-    tools:context="val.com.valparked.activity.SplashActivity">
+    tools:context="val.com.velparked.activity.SplashActivity">
     <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"

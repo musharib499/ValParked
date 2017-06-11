@@ -19,7 +19,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId "val.com.valparked"
+        applicationId "val.com.velparked"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1

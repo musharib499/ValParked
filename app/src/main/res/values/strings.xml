@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ValParked</string>
+    <string name="app_name">VelParked</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -48,6 +48,7 @@
     <string name="in">In :</string>
     <string name="req">Req :</string>
     <string name="out">Out :</string>
+    <string name="validate">Validate Card</string>
 
 
 </resources>
