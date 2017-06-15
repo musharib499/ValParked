@@ -9,6 +9,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import val.com.velparked.model.BaseResponseModel;
 import val.com.velparked.model.CallMyCar;
+import val.com.velparked.model.ConfirmCallVehicle;
+import val.com.velparked.model.ConfirmValidate;
 import val.com.velparked.model.Login;
 import val.com.velparked.model.Parking;
 import val.com.velparked.model.ValidCardInfo;
@@ -48,6 +50,12 @@ public class RestApiCalls {
     }
     public static Call<BaseResponseModel> getLogOut(HashMap<String, String> params) {
         return getRetrofitApi().getLogOut(params);
+    }
+    public static Call<ConfirmValidate> getConfirmValidate(HashMap<String, String> params) {
+        return getRetrofitApi().getConfirmValidate(params);
+    }
+    public static Call<ConfirmCallVehicle> getConfirmCallMyCar(HashMap<String, String> params) {
+        return getRetrofitApi().getConfirmCallMyCar(params);
     }
     public static Call<ValidCardInfo> getIssueCard(HashMap<String, String> params) {
         return getRetrofitApi().getIssueCard(params);

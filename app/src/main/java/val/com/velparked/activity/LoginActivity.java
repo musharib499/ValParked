@@ -32,7 +32,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = LoginActivity.class.getName();
-    private TextView tvVersion;
+    private TextView tvVersion,tvError;
     private EditText edUserId;
     private EditText edUserPass;
     private Button btnLogin;
@@ -56,6 +56,7 @@ public class LoginActivity extends BaseActivity {
 
     public void onView() {
         tvVersion = (TextView) findViewById(R.id.tvVersion);
+        tvError = (TextView) findViewById(R.id.tvError);
         edUserId = (EditText) findViewById(R.id.edUserId);
         edUserPass = (EditText) findViewById(R.id.edPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -77,6 +78,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isConnected(context)){
+                    tvError.setVisibility(View.GONE);
+                    tvError.setText("");
                     if (!TextUtils.isEmpty(edUserId.getText().toString()) && !TextUtils.isEmpty(edUserPass.getText().toString())) {
                         String userType = "0";
                         if (radioGroup.getCheckedRadioButtonId() == rbValet.getId()) {
@@ -85,13 +88,13 @@ public class LoginActivity extends BaseActivity {
                             userType = "1";
                         }
 
-                        setLogin(edUserId.getText().toString(), edUserId.getText().toString(), userType);
+                        setLogin(edUserId.getText().toString(), edUserPass.getText().toString(), userType);
                     }else {
                         if (TextUtils.isEmpty(edUserId.getText().toString()))
-                             edUserId.setError("Please user id");
+                             edUserId.setError("Please enter username");
 
                         if (TextUtils.isEmpty(edUserPass.getText().toString()))
-                        edUserPass.setError("Please  password");
+                            edUserPass.setError("Please enter password");
                     }
                 }
 
@@ -147,8 +150,12 @@ public class LoginActivity extends BaseActivity {
 
                     } else {
                         Toast.makeText(context, login.getMessage(),LENGTH_SHORT).show();
+                        tvError.setVisibility(View.VISIBLE);
+                        tvError.setText(R.string.invalidup);
+
                     }
                 } else {
+
                     Toast.makeText(context,response.message() ,LENGTH_SHORT).show();
 
                 }

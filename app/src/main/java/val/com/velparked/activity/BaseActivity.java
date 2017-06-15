@@ -51,6 +51,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     protected FrameLayout frameLayout;
     protected NavigationView navigationView;
     private TextView tvPowerBy;
+    private Button btnNext;
 
     private boolean mToolBarNavigationListenerIsRegistered = false;
 
@@ -231,6 +232,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
         } else {
             nextButton.setVisibility(View.GONE);
         }
+        btnNext=nextButton;
       /*  nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,6 +251,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
         } else {
             nextButton.setVisibility(View.GONE);
         }
+       btnNext= nextButton;
         return nextButton;
     }
 
@@ -274,7 +277,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
         TextView tvHotelId=(TextView) header.findViewById(R.id.tvHotelId);
         TextView tvDeviceId=(TextView) header.findViewById(R.id.tvDeviceId);
         TextView tvName=(TextView) header.findViewById(R.id.tvName);
-      //  TextView tvVersion=(TextView) findViewById(R.id.tvVersion);
+        TextView tvVersion=(TextView) findViewById(R.id.tvVersion);
        // Button btnLogout=(Button) findViewById(R.id.btnLogout);
         ImageView imageView=(ImageView) header.findViewById(R.id.imgBack);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -301,7 +304,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
             tvHotelId.setText("Hotel Id : " + (details.getUserid()!=null ? details.getUserid():""));
             tvDeviceId.setText("Device Id : "+String.valueOf(details.getDeviceID()!=null ? details.getDeviceID():""));
             tvName.setText(details.getUserid()!=null ? details.getName():"");
-           // tvVersion.setText("Version " + BuildConfig.VERSION_NAME);
+            tvVersion.setText("Version " + BuildConfig.VERSION_NAME);
 
         }
 

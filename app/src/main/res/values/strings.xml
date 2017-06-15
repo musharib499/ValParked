@@ -49,6 +49,9 @@
     <string name="req">Req :</string>
     <string name="out">Out :</string>
     <string name="validate">Validate Card</string>
+    <string name="park_vehicle">PARK VEHICLE</string>
+    <string name="next">NEXT</string>
+    <string name="invalidup">Invalid username and password.</string>
 
 
 </resources>

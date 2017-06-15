@@ -2,6 +2,9 @@ package val.com.velparked.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -24,6 +27,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import val.com.velparked.R;
 import val.com.velparked.adapter.BaseAdapter;
+import val.com.velparked.fragment.HomeFragment;
+import val.com.velparked.fragment.IssueCardFragment;
+import val.com.velparked.fragment.NfcRederCardFragment;
 import val.com.velparked.model.Login;
 import val.com.velparked.model.Parking;
 import val.com.velparked.model.ParkingInfo;
@@ -65,9 +71,13 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     protected void onResume() {
         super.onResume();
         setTitleMessage("Parking");
+        setNavigationHeader(navigationView);
+        setNavigation();
         if (getParking()!=null)
             setData();
     }
+
+
 
     @Override
     public void onBind(ParkingVewHolder holder, int position) {
@@ -130,6 +140,8 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
                     }
 
                 }else {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
                     Toast.makeText(MasterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -170,6 +182,8 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     public boolean onCreateOptionsMenu(Menu menu) {
          super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        navigationView.getMenu().setGroupVisible(R.id.group,false);
+
         return true;
 
     }
@@ -185,12 +199,35 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
                     setLogOut();
 
                 return true;
-            case android.R.id.home:
+           /* case android.R.id.home:
                onBackPressed();
-                return true;
+                return true;*/
                 default:
                     return  super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+     /*   if (id == R.id.nav_home) {
+            replaceFragment(HomeFragment.newInstance());
+        } else if (id == R.id.nav_validate_card) {
+            replaceFragment(NfcRederCardFragment.newInstance("", Constant.CardValidFragment));
+        } else if (id == R.id.nav_issue_card) {
+            replaceFragment(IssueCardFragment.newInstance());
+        } else if (id == R.id.nav_call_my_car) {
+            replaceFragment(NfcRederCardFragment.newInstance("", Constant.CallValidFragment));
+        } else*/ if (id == R.id.nav_logout) {
+            if (isConnected(this))
+                setLogOut();
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

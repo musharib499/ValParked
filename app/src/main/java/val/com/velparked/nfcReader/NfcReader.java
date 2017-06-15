@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -83,7 +84,13 @@ public class NfcReader {
                 //mTags.add(tag);
                 if (tag!=null)
                 {
-                    ((HomeActivity)mContext).setTag(toHex(tag.getId()).replace(" ", ""));
+                    ((HomeActivity)mContext).setTag(toReversedHex(tag.getId()).replace(" ", ""));
+
+                   // toHex(tag.getId());
+                    //toDec(tag.getId());
+                    //toReversedDec(tag.getId());
+                    //toReversedHex(tag.getId());
+
                 }
 
 
@@ -103,6 +110,7 @@ public class NfcReader {
 
         String prefix = "android.nfc.tech.";
         sb.append("Technologies: ");
+        Log.e("NFC",sb.toString());
         for (String tech : tag.getTechList()) {
             sb.append(tech.substring(prefix.length()));
             sb.append(", ");

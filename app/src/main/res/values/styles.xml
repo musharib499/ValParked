@@ -69,8 +69,7 @@
     </style>
     <style name="TextStyleNormal.Botton_Button">
         <item name="android:textSize">@dimen/text_size_large30</item>
-        <item name="android:background">@color/bottom_button_color</item>
-        <item name="android:textColor">@color/blue</item>
+        <item name="android:background">@drawable/button_selecter</item>
         <item name="android:padding">@dimen/padding_medium</item>
         <item name="android:layout_height">@dimen/text_size_small</item>
     </style>
@@ -102,6 +101,9 @@
 
     <style name="TextStyleNormal.Large.Bold">
         <item name="android:textStyle">bold</item>
+    </style>
+    <style name="button">
+
     </style>
 
 

@@ -39,7 +39,7 @@ public class IssueCardFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getFragmentAdapter().navigationLockShowBackArrow(false,"Issue Card");
+        getFragmentAdapter().navigationLockShowBackArrow(false,getString(R.string.issue_card));
 
     }
 

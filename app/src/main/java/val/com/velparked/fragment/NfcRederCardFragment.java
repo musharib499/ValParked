@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
     private TextView tvError;
     private String type = "";
     private String number = "";
+    private Button btnNext;
 
     public NfcRederCardFragment() {
         // Required empty public constructor
@@ -70,8 +72,11 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
         tvShow = (TextView) view.findViewById(R.id.tvShow);
         tvCarNo = (TextView) view.findViewById(R.id.tvCarNo);
         tvCarNo.setText(number);
-        tvShow.setText(getResources().getString(R.string.show_card));
+        tvShow.setText(getResources().getString(R.string.show_card_here));
         tvError = (TextView) view.findViewById(R.id.tvError);
+        btnNext= getFragmentAdapter().setFooter(getString(R.string.park_vehicle),true);
+        btnNext.setEnabled(false);
+
     }
 
     private void callView(View view) {
@@ -80,12 +85,18 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
         tvCarNo.setText(R.string.call_car);
         tvShow.setText(getResources().getString(R.string.show_valet_card));
         tvError = (TextView) view.findViewById(R.id.tvError);
+        btnNext= getFragmentAdapter().setFooter(getString(R.string.next),true);
+        btnNext.setEnabled(false);
     }
 
     private void validView(View view) {
         tvShow = (TextView) view.findViewById(R.id.tvShow);
+        tvCarNo = (TextView) view.findViewById(R.id.tvCarNo);
+        tvCarNo.setVisibility(View.GONE);
         tvShow.setText(getResources().getString(R.string.show_card));
         tvError = (TextView) view.findViewById(R.id.tvError);
+        btnNext= getFragmentAdapter().setFooter(getString(R.string.next),true);
+        btnNext.setEnabled(false);
 
     }
 
@@ -140,6 +151,13 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (btnNext!=null)
+            btnNext.setEnabled(true);
+    }
+
+    @Override
     public void setTagValue(String tagValue) {
         if (getActivity() != null)
             if (tagValue != null) {
@@ -162,7 +180,7 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
             }
     }
 
-    public void setValid(String nfc) {
+    public void setValid(final String nfc) {
         HashMap<String, String> params = new HashMap<>();
         params.put(Constant.NCF_ID, nfc);
         showProgress(getActivity(), "Please wait........");
@@ -177,7 +195,17 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
                     if (validCardInfo.getStatus() && validCardInfo.cardInfo != null) {
 
                         if (validCardInfo.cardInfo.getVehicalNumber() != null)
-                            getFragmentAdapter().addToBackStack(ValidConfirmFragment.newInstance(validCardInfo.cardInfo.getVehicalNumber()));
+                        {
+                            btnNext.setEnabled(true);
+                            final String vehicleNo=validCardInfo.cardInfo.getVehicalNumber();
+                            btnNext.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    getFragmentAdapter().addToBackStack(ValidateConfirmFragment.newInstance(nfc,vehicleNo));
+
+                                }
+                            });
+                        }
 
                         tvError.setText("");
                     } else {
@@ -216,9 +244,18 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
                     if (callMyCar.getStatus()) {
 
 
-                        if (!TextUtils.isEmpty(callMyCar.vehicalInfo.vehicalNumber))
-                            getFragmentAdapter().addToBackStack(CallConfirmFragment.newInstance(callMyCar.vehicalInfo.vehicalNumber));
-                        tvError.setText("");
+                        if (!TextUtils.isEmpty(callMyCar.vehicalInfo.vehicalNumber)) {
+                             btnNext.setEnabled(true);
+                            final String vehicleNo=callMyCar.vehicalInfo.vehicalNumber;
+                            btnNext.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    getFragmentAdapter().addToBackStack(CallConfirmFragment.newInstance(nfc,vehicleNo));
+
+                                }
+                            });
+
+                        }else tvError.setText("");
 
 
                     } else {
@@ -257,13 +294,20 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
             @Override
             public void onResponse(Call<ValidCardInfo> call, Response<ValidCardInfo> response) {
                 hideProgress();
-                if (response.isSuccessful() && response.body() != null) {
                     ValidCardInfo validCardInfo = response.body();
                     Log.e("Issue", response.toString());
-                    if (validCardInfo.getStatus()) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (validCardInfo.getStatus()) {
 
                         //   if (validCardInfo.cardInfo.getVehicalNumber()!=null)
-                        getFragmentAdapter().addToBackStack(IssueCardConfirmFragment.newInstance(vehicle));
+                        btnNext.setEnabled(true);
+                        btnNext.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getFragmentAdapter().addToBackStack(IssueCardConfirmFragment.newInstance(vehicle));
+                            }
+                        });
+
 
                         tvError.setText(validCardInfo.getMessage());
 
@@ -287,6 +331,7 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
                 Toast.makeText(getActivity(), "" + call.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
     }

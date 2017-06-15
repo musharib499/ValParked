@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal|bottom"
+                android:paddingBottom="@dimen/padding_medium"
                 android:text="Version Code" />
 
       <!--  </LinearLayout>-->

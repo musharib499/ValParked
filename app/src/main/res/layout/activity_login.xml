@@ -41,6 +41,12 @@
             android:inputType="textPassword"
             android:padding="@dimen/padding_large" />
 
+        <TextView
+            android:id="@+id/tvError"
+            android:visibility="gone"
+            style="@style/TextStyleNormal.Red"
+            tools:text="Show Card" />
+
 
         <RadioGroup
             android:id="@+id/radioGroup"
