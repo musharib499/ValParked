@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -115,6 +116,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
 
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity == null) {
+            buildDialog(context);
             return false;
         } else {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
@@ -126,17 +128,26 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
                 }
             }
         }
+        buildDialog(context);
         return false;
     }
 
     @Override
-    public void buildDialog(Context c) {
+    public void buildDialog(final Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("No Internet connection.");
         builder.setMessage("You have no internet connection");
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+               isConnected(c);
+            }
+        });
+        builder.setNegativeButton("Cancel",  new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -144,7 +155,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
                 dialog.dismiss();
             }
         });
-
         builder.show();
     }
 
@@ -183,9 +193,9 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
 
         Fragment oldFragment = fragmentManager.findFragmentByTag(fragment.getClass().getName());
 
-        if (oldFragment != null) {
+       /* if (oldFragment != null) {
             fragmentManager.beginTransaction().remove(oldFragment).commit();
-        }
+        }*/
 
         fragmentManager
                 .beginTransaction()
@@ -340,10 +350,9 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     }
     @Override
     public void onBackPressed() {
-        if (fragmentManager.getBackStackEntryCount() > 0) {
+        if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStack();
         } else {
-            if (!(this instanceof HomeActivity))
                 super.onBackPressed();
 
         }

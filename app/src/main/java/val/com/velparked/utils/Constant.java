@@ -22,6 +22,9 @@ public class Constant {
 
     public static final String NCF_ID="nfc";
 
+    public static final String FCM_MASTER="fcm_master";
+    public static final String NOTIFICATION="notification";
+
     public static final String VALID_TAG_ID="valid_tag_id";
     public static final String TAG_ID="tag_id";
 

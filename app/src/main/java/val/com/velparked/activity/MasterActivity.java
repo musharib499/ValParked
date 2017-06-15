@@ -1,8 +1,13 @@
 package val.com.velparked.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +35,7 @@ import val.com.velparked.adapter.BaseAdapter;
 import val.com.velparked.fragment.HomeFragment;
 import val.com.velparked.fragment.IssueCardFragment;
 import val.com.velparked.fragment.NfcRederCardFragment;
+import val.com.velparked.intarface.NotificationInterface;
 import val.com.velparked.model.Login;
 import val.com.velparked.model.Parking;
 import val.com.velparked.model.ParkingInfo;
@@ -38,7 +44,7 @@ import val.com.velparked.utils.Constant;
 import val.com.velparked.utils.Utils;
 import val.com.velparked.viewholder.ParkingVewHolder;
 
-public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAdapterListener<ParkingVewHolder>{
+public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAdapterListener<ParkingVewHolder>,NotificationInterface{
 
     public List<ParkingInfo> getParking() {
         return parking;
@@ -54,6 +60,8 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getValApplication().setUpFCM();
+        getValApplication().initializeFcmToken();
         getLayoutInflater().inflate(R.layout.activity_master,frameLayout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         emptyView = (TextView) findViewById(R.id.empty_view);
@@ -62,6 +70,7 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         {
             setLoadParking();
         }
+        getValApplication().initializeFcmToken();
     }
     public void setData() {
         Utils.recyclerView(recyclerView, this, true).setAdapter( new BaseAdapter<ParkingInfo,ParkingVewHolder>(this, getParking(), this, ParkingVewHolder.class, R.layout.parking_item));
@@ -70,11 +79,16 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     @Override
     protected void onResume() {
         super.onResume();
+
         setTitleMessage("Parking");
         setNavigationHeader(navigationView);
         setNavigation();
         if (getParking()!=null)
             setData();
+
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver,
+                new IntentFilter(Constant.FCM_MASTER));
     }
 
 
@@ -104,6 +118,12 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
             else if (getParking().get(position).getStatus().equalsIgnoreCase("Process"))
                 holder.imIcon.setImageResource(R.drawable.ic_process);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
     private void setLoadParking()
@@ -230,4 +250,26 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void notify(String s) {
+
+        if (isConnected(this))
+        {
+            setLoadParking();
+        }
+
+    }
+
+
+    public BroadcastReceiver receiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isConnected(MasterActivity.this))
+            {
+                setLoadParking();
+            }
+        }
+    };
+
 }

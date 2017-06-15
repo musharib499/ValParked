@@ -39,7 +39,9 @@ public class Utils {
         }
         return false;
     }
-
+    public static boolean isNullOrEmpty(final String pStr) {
+        return pStr == null || pStr.trim().length() == 0 || pStr.trim().equalsIgnoreCase("null");
+    }
     public static void showNoConnectionDialog(final Activity activity) {
         showNoConnectionDialog(activity,activity.getString(R.string.no_connection_title),activity.getString(R.string.no_connection),null);
     }

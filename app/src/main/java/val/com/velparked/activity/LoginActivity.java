@@ -77,18 +77,20 @@ public class LoginActivity extends BaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isConnected(context)){
-                    tvError.setVisibility(View.GONE);
-                    tvError.setText("");
-                    if (!TextUtils.isEmpty(edUserId.getText().toString()) && !TextUtils.isEmpty(edUserPass.getText().toString())) {
-                        String userType = "0";
-                        if (radioGroup.getCheckedRadioButtonId() == rbValet.getId()) {
-                            userType = "0";
-                        } else if (radioGroup.getCheckedRadioButtonId() == rbMaster.getId()) {
-                            userType = "1";
-                        }
 
-                        setLogin(edUserId.getText().toString(), edUserPass.getText().toString(), userType);
+                    if (!TextUtils.isEmpty(edUserId.getText().toString()) && !TextUtils.isEmpty(edUserPass.getText().toString())) {
+                        if (isConnected(context)) {
+                            tvError.setVisibility(View.GONE);
+                            tvError.setText("");
+                            String userType = "0";
+                            if (radioGroup.getCheckedRadioButtonId() == rbValet.getId()) {
+                                userType = "0";
+                            } else if (radioGroup.getCheckedRadioButtonId() == rbMaster.getId()) {
+                                userType = "1";
+                            }
+
+                            setLogin(edUserId.getText().toString(), edUserPass.getText().toString(), userType);
+                        }
                     }else {
                         if (TextUtils.isEmpty(edUserId.getText().toString()))
                              edUserId.setError("Please enter username");
@@ -96,7 +98,7 @@ public class LoginActivity extends BaseActivity {
                         if (TextUtils.isEmpty(edUserPass.getText().toString()))
                             edUserPass.setError("Please enter password");
                     }
-                }
+
 
             }
         });
