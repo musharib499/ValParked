@@ -1,8 +1,10 @@
 package val.com.velparked.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,6 +75,8 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
         tvCarNo = (TextView) view.findViewById(R.id.tvCarNo);
         tvCarNo.setText(number);
         tvShow.setText(getResources().getString(R.string.show_card_here));
+        //tvShow.setTextSize(getResources().getDimension(R.dimen.text_size_small));
+        tvShow.setTextColor(ContextCompat.getColor(getActivity(),R.color.error_color));
         tvError = (TextView) view.findViewById(R.id.tvError);
         btnNext= getFragmentAdapter().setFooter(getString(R.string.park_vehicle),true);
         btnNext.setEnabled(false);
@@ -328,7 +332,7 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
             @Override
             public void onFailure(Call<ValidCardInfo> call, Throwable t) {
                 hideProgress();
-                Toast.makeText(getActivity(), "" + call.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "" + t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

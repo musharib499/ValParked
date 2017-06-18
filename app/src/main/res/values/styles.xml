@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/dark_blue</item>
+        <item name="android:colorBackground">@color/background</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
@@ -50,9 +51,17 @@
     <style name="TextStyleNormal.Red">
         <item name="android:textColor">@color/red</item>
     </style>
+    <style name="TextStyleNormal.placeholderColor">
+        <item name="android:textColor">@color/placeholder_text_color</item>
+        <item name="android:textColorHint">@color/placeholder_text_color</item>
+        <item name="android:padding">@dimen/padding_large</item>
+    </style>
     <style name="TextStyleNormal.Gray">
         <item name="android:textColor">@color/gray</item>
-        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextStyleNormal.Radio">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="buttonTint">@color/border</item>
     </style>
 
     <style name="TextStyleNormal.Large">
@@ -67,14 +76,17 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_large</item>
     </style>
-    <style name="TextStyleNormal.Botton_Button">
+    <style name="TextStyleNormal.Bottom_Button">
         <item name="android:textSize">@dimen/text_size_large30</item>
         <item name="android:background">@drawable/button_selecter</item>
         <item name="android:padding">@dimen/padding_medium</item>
-        <item name="android:layout_height">@dimen/text_size_small</item>
     </style>
     <style name="TextStyleNormal.Large30">
         <item name="android:textSize">@dimen/text_size_large30</item>
+    </style>
+    <style name="TextStyleNormal.Large30.borderColor">
+        <item name="android:textColor">@color/border</item>
+        <item name="android:layout_margin">@dimen/margin_medium</item>
     </style>
     <style name="TextStyleNormal.Large35">
         <item name="android:textSize">@dimen/text_size_large35</item>

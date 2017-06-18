@@ -34,4 +34,7 @@
     <dimen name="padding_margin_8dp">8dp</dimen>
     <dimen name="radius">2dp</dimen>
 
+    <dimen name="easy_dialog_default_left_margin">12dp</dimen>
+    <dimen name="easy_dialog_default_right_margin">12dp</dimen>
+
 </resources>

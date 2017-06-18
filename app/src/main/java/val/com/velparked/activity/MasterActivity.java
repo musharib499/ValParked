@@ -32,10 +32,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import val.com.velparked.R;
 import val.com.velparked.adapter.BaseAdapter;
-import val.com.velparked.fragment.HomeFragment;
-import val.com.velparked.fragment.IssueCardFragment;
-import val.com.velparked.fragment.NfcRederCardFragment;
-import val.com.velparked.intarface.NotificationInterface;
 import val.com.velparked.model.Login;
 import val.com.velparked.model.Parking;
 import val.com.velparked.model.ParkingInfo;
@@ -44,7 +40,7 @@ import val.com.velparked.utils.Constant;
 import val.com.velparked.utils.Utils;
 import val.com.velparked.viewholder.ParkingVewHolder;
 
-public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAdapterListener<ParkingVewHolder>,NotificationInterface{
+public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdapterListener<ParkingVewHolder> {
 
     public List<ParkingInfo> getParking() {
         return parking;
@@ -54,26 +50,34 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         this.parking = parking;
     }
 
-    private List<ParkingInfo> parking=null;
+    private List<ParkingInfo> parking = null;
     private RecyclerView recyclerView;
     private TextView emptyView;
+    private boolean status=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getValApplication().setUpFCM();
-        getValApplication().initializeFcmToken();
-        getLayoutInflater().inflate(R.layout.activity_master,frameLayout);
+        getLayoutInflater().inflate(R.layout.activity_master, frameLayout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         emptyView = (TextView) findViewById(R.id.empty_view);
+        emptyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isConnected(MasterActivity.this)) {
+                    setLoadParking();
+                }
+            }
+        });
 
-        if (isConnected(this))
-        {
+        if (isConnected(this)) {
             setLoadParking();
         }
         getValApplication().initializeFcmToken();
     }
+
     public void setData() {
-        Utils.recyclerView(recyclerView, this, true).setAdapter( new BaseAdapter<ParkingInfo,ParkingVewHolder>(this, getParking(), this, ParkingVewHolder.class, R.layout.parking_item));
+        Utils.recyclerView(recyclerView, this, true).setAdapter(new BaseAdapter<ParkingInfo, ParkingVewHolder>(this, getParking(), this, ParkingVewHolder.class, R.layout.parking_item));
     }
 
     @Override
@@ -83,8 +87,8 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         setTitleMessage("Parking");
         setNavigationHeader(navigationView);
         setNavigation();
-        if (getParking()!=null)
-            setData();
+       /* if (getParking() != null)
+            setData();*/
 
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver,
@@ -92,31 +96,39 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     }
 
 
-
     @Override
     public void onBind(ParkingVewHolder holder, int position) {
-       if (!TextUtils.isEmpty(getParking().get(position).getVehicalNumber()))
-        holder.tvCarNo.setText(getParking().get(position).getVehicalNumber());
+        if (!TextUtils.isEmpty(getParking().get(position).getVehicalNumber()))
+            holder.tvCarNo.setText(getParking().get(position).getVehicalNumber());
 
         if (!TextUtils.isEmpty(getParking().get(position).getStatus()) && getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
+        {
             holder.tvCarNo.setTextColor(getResources().getColor(R.color.red));
+            holder.llPopupView.setVisibility(View.VISIBLE);
+        }else {
+            holder.tvCarNo.setTextColor(getResources().getColor(R.color.border));
+            holder.llPopupView.setVisibility(View.GONE);
+        }
 
         if (!TextUtils.isEmpty(getParking().get(position).getParkTime()))
-        holder.tvIn.setText(setColorSpan(getString(R.string.in),(getParking().get(position).getParkTime()!=null? getParking().get(position).getParkTime() :"...")), TextView.BufferType.SPANNABLE);
+            holder.tvIn.setText(setColorSpan(getString(R.string.in), (getParking().get(position).getParkTime() != null ? getParking().get(position).getParkTime() : "...")), TextView.BufferType.SPANNABLE);
 
         if (!TextUtils.isEmpty(getParking().get(position).getRequestTime()))
-        holder.tvReq.setText(setColorSpan(getString(R.string.req),(getParking().get(position).getRequestTime()!=null? getParking().get(position).getRequestTime() :"...")), TextView.BufferType.SPANNABLE);
+            holder.tvReq.setText(setColorSpan(getString(R.string.req), (getParking().get(position).getRequestTime() != null ? getParking().get(position).getRequestTime() : "...")), TextView.BufferType.SPANNABLE);
 
         if (!TextUtils.isEmpty(getParking().get(position).getPickedTime()))
-         holder.tvOut.setText(setColorSpan(getString(R.string.out),(getParking().get(position).getPickedTime()!=null? getParking().get(position).getPickedTime() :"...")), TextView.BufferType.SPANNABLE);
+            holder.tvOut.setText(setColorSpan(getString(R.string.out), (getParking().get(position).getPickedTime() != null ? getParking().get(position).getPickedTime() : "...")), TextView.BufferType.SPANNABLE);
 
         if (!TextUtils.isEmpty(getParking().get(position).getStatus())) {
+
             if (getParking().get(position).getStatus().equalsIgnoreCase("Parked"))
-            holder.imIcon.setImageResource(R.drawable.ic_right);
-            else if (getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
-                holder.imIcon.setImageResource(R.drawable.ic_right_request);
-            else if (getParking().get(position).getStatus().equalsIgnoreCase("Process"))
-                holder.imIcon.setImageResource(R.drawable.ic_process);
+                holder.imIcon.setImageResource(R.drawable.ic_sedan_car_model);
+
+           if (getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
+                holder.imIcon.setImageResource(R.drawable.ic_check_circle_red);
+
+            if (getParking().get(position).getStatus().equalsIgnoreCase("Delivered"))
+                holder.imIcon.setImageResource(R.drawable.ic_check_circle_green);
         }
     }
 
@@ -126,40 +138,36 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
-    private void setLoadParking()
-    {
-        Login login=getValApplication().getLoginResponse();
-        showProgress("Parking Loading....");
-        HashMap<String,String> params = new HashMap<>();
-        params.put(Constant.USER_ID,"1"/*login.getUserDetails().getUserid()*/);
+    private void setLoadParking() {
+        if (!showProgress(this,"").isShowing())
+            showProgress(this,"Parking Loading....");
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.USER_ID, "1"/*login.getUserDetails().getUserid()*/);
         RestApiCalls.getParking(params).enqueue(new Callback<Parking>() {
             @Override
             public void onResponse(Call<Parking> call, Response<Parking> response) {
                 hideProgress();
-
-                if (response.isSuccessful() && response.body()!=null)
-                {
-                    Parking parking=response.body();
-                    if (parking.getStatus() && parking.getParkingInfo().size()!=0)
-                    {
-                       if (getParking()!=null && getParking().size()>0 )
-                       {
-                           getParking().clear();
-                       }
+                status=true;
+                if (response.isSuccessful() && response.body() != null) {
+                    Parking parking = response.body();
+                    if (parking.getStatus() && parking.getParkingInfo().size() != 0) {
+                        if (getParking() != null && getParking().size() > 0) {
+                            getParking().clear();
+                        }
                         setParking(parking.getParkingInfo());
                         recyclerView.setVisibility(View.VISIBLE);
                         emptyView.setVisibility(View.GONE);
                         setData();
 
 
-
-                    }else {
+                    } else {
                         recyclerView.setVisibility(View.GONE);
                         emptyView.setVisibility(View.VISIBLE);
 
                     }
 
-                }else {
+                } else {
                     recyclerView.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
                     Toast.makeText(MasterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
@@ -170,28 +178,29 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
             @Override
             public void onFailure(Call<Parking> call, Throwable t) {
                 hideProgress();
+                status=true;
                 Toast.makeText(MasterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     private Spanned getColoredSpanned(String text) {
         String input = "<font color=" + R.color.gray + ">" + text + "</font>";
-        return Html.fromHtml( "<![CDATA[<font color='#145A14'> + text + </font>]]>");
-    }
-    public Spannable setColor(String s)
-    {
-        Spannable wordtoSpan = new SpannableString(s);
-        wordtoSpan.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-       return wordtoSpan;
+        return Html.fromHtml("<![CDATA[<font color='#145A14'> + text + </font>]]>");
     }
 
-    private SpannableStringBuilder setColorSpan(String s,String s1)
-    {
+    public Spannable setColor(String s) {
+        Spannable wordtoSpan = new SpannableString(s);
+        wordtoSpan.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return wordtoSpan;
+    }
+
+    private SpannableStringBuilder setColorSpan(String s, String s1) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        SpannableString redSpannable= new SpannableString(s);
+        SpannableString redSpannable = new SpannableString(s);
         redSpannable.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), 0);
         builder.append(redSpannable);
-        SpannableString whiteSpannable= new SpannableString(s1);
+        SpannableString whiteSpannable = new SpannableString(s1);
         whiteSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s1.length(), 0);
         builder.append(whiteSpannable);
         return builder;
@@ -200,9 +209,9 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        navigationView.getMenu().setGroupVisible(R.id.group,false);
+        super.onCreateOptionsMenu(menu);
+      /*  getMenuInflater().inflate(R.menu.menu_main, menu);*/
+        navigationView.getMenu().setGroupVisible(R.id.group, false);
 
         return true;
 
@@ -212,18 +221,17 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.action_logout:
-                if (isConnected(this))
-                    setLogOut();
+                if (isConnected(this) || status)
+                      setLoadParking();
 
                 return true;
-           /* case android.R.id.home:
+            case android.R.id.home:
                onBackPressed();
-                return true;*/
-                default:
-                    return  super.onOptionsItemSelected(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
     }
@@ -240,7 +248,8 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
             replaceFragment(IssueCardFragment.newInstance());
         } else if (id == R.id.nav_call_my_car) {
             replaceFragment(NfcRederCardFragment.newInstance("", Constant.CallValidFragment));
-        } else*/ if (id == R.id.nav_logout) {
+        } else*/
+        if (id == R.id.nav_logout) {
             if (isConnected(this))
                 setLogOut();
 
@@ -251,22 +260,12 @@ public class MasterActivity extends BaseActivity  implements BaseAdapter.BindAda
         return true;
     }
 
-    @Override
-    public void notify(String s) {
-
-        if (isConnected(this))
-        {
-            setLoadParking();
-        }
-
-    }
 
 
-    public BroadcastReceiver receiver=new BroadcastReceiver() {
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isConnected(MasterActivity.this))
-            {
+            if (isConnected(MasterActivity.this) || status) {
                 setLoadParking();
             }
         }

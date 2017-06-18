@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/padding_xlarge"
     android:layout_gravity="center"
+    android:background="@color/background"
     tools:context="val.com.velparked.fragment.ThanksFragment">
 
     <TextView
@@ -27,7 +28,7 @@
 
     <TextView
         android:id="@+id/tvCarNo"
-        style="@style/TextStyleNormal.Large30.margin"
+        style="@style/TextStyleNormal.Large30.borderColor"
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
         android:layout_below="@id/tvMessage" />

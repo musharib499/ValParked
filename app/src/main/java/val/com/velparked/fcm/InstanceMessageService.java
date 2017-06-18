@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -13,6 +14,10 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import val.com.velparked.R;
 import val.com.velparked.activity.MasterActivity;
 import val.com.velparked.intarface.NotificationInterface;
 import val.com.velparked.utils.Constant;
@@ -31,17 +36,21 @@ public class InstanceMessageService extends FirebaseMessagingService {
         if (anInterface instanceof NotificationInterface)
             anInterface=(NotificationInterface) getApplicationContext();
         //Log data to Log Cat
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + remoteMessage.getData().toString());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getData().toString());
-        //create notification
-       /* if (anInterface!=null)
-        anInterface.notify(remoteMessage.getData().toString());*/
+
+        JSONObject object = new JSONObject(remoteMessage.getData());
+        Log.e("Notification",object.toString());
         Intent intent = new Intent(Constant.FCM_MASTER);
         // add data
-        intent.putExtra(Constant.NOTIFICATION, remoteMessage.getNotification().toString());
+        intent.putExtra(Constant.NOTIFICATION, remoteMessage.getData().toString());
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        sendNotification(remoteMessage.getNotification().getBody());
+        try {
+            sendNotification(object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -53,18 +62,18 @@ public class InstanceMessageService extends FirebaseMessagingService {
             anInterface=(NotificationInterface) this;*/
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(JSONObject messageBody) throws JSONException {
         Intent intent = new Intent(this, MasterActivity.class);
-        intent.putExtra("msg",messageBody);
+        intent.putExtra("msg",messageBody.getString("message").toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_notification_overlay)
-                .setContentTitle("FCM Message")
-                .setContentText(messageBody)
+                .setSmallIcon(getNotificationIcon())
+                .setContentTitle(messageBody.getString("title").toString())
+                .setContentText(messageBody.getString("message"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
@@ -73,6 +82,11 @@ public class InstanceMessageService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.drawable.ic_sedan_car_model : R.mipmap.ic_launcher;
     }
 
 }

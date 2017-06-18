@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3f207e</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#2d155e</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="background">#f5f5f5</color>
 
 
     <color name="light_gray">#E4E4E4</color>
     <color name="white">#ffffff</color>
-    <color name="green">#1E9B01</color>
-    <color name="light_oragne">#E8AEAE</color>
+    <color name="green">#0f9b00</color>
+    <color name="light_oragne">#e39191</color>
     <color name="black">#263242</color>
     <color name="bottom_button_color">#191919</color>
     <color name="blue">#3F207E</color>
     <color name="dark_blue">#2D155E</color>
     <color name="silver">#C0C0C0</color>
     <color name="gray">#808080</color>
-    <color name="background">#F5F5F5</color>
-    <color name="tarsparent">#D9FFFFFF</color>
+    <color name="transparent">#D9FFFFFF</color>
     <color name="red">#FC4B4B</color>
     <color name="error_color">#ff0000</color>
     <color name="button_unselect">#7e7e7e</color>
     <color name="button_select">#191919</color>
     <color name="text_unselect">#a2a2a2</color>
     <color name="text_select">#9a70ee</color>
+    <color name="placeholder_text_color">#a9a0c0</color>
+    <color name="border">#2e2e2e</color>
+    <color name="yellow">#F0E672</color>
+
 </resources>

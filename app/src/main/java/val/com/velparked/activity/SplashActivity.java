@@ -28,6 +28,7 @@ public class SplashActivity extends BaseActivity {
         show();
         setContentView(R.layout.activity_fullscreen);
         valApplication = getValApplication();
+        valApplication.setUpFCM();
 
         complexPreferences = valApplication.getComplexPreference();
 
@@ -36,6 +37,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 Login login = valApplication.getLoginResponse();
+                        valApplication.initializeFcmToken();
                 if (login != null) {
 
                     if (login.getUserDetails().getUserType().equalsIgnoreCase("0")) {

@@ -191,7 +191,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     @Override
     public void addToBackStack(Fragment fragment) {
 
-        Fragment oldFragment = fragmentManager.findFragmentByTag(fragment.getClass().getName());
+      //  Fragment oldFragment = fragmentManager.findFragmentByTag(fragment.getClass().getName());
 
        /* if (oldFragment != null) {
             fragmentManager.beginTransaction().remove(oldFragment).commit();
@@ -323,7 +323,9 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     protected void setLogOut()
     {
         HashMap<String,String> params = new HashMap<>();
-        showProgress("Logout");
+        if (!progressDialog.isShowing())
+             showProgress("Logout");
+
         params.put(Constant.USER_ID,getValApplication().getLoginResponse().getUserDetails().getUserid());
         RestApiCalls.getLogOut(params).enqueue(new Callback<BaseResponseModel>() {
             @Override
@@ -350,10 +352,15 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     }
     @Override
     public void onBackPressed() {
-        if (fragmentManager.getBackStackEntryCount() > 1) {
+        hideProgress();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+
             fragmentManager.popBackStack();
+
+
         } else {
                 super.onBackPressed();
+
 
         }
 

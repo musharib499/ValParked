@@ -3,70 +3,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_25dp"
+    android:background="@color/background"
     tools:context="val.com.velparked.fragment.HomeFragment">
 
     <LinearLayout
         android:id="@+id/llValidate"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="@dimen/margin_25dp"
         android:layout_centerHorizontal="true"
-        android:duplicateParentState="true"
-        android:weightSum="5"
-        android:paddingRight="-5dp"
+        android:layout_marginTop="@dimen/margin_25dp"
         android:background="@drawable/edittext_shap"
-        >
+        android:duplicateParentState="true"
+        android:paddingRight="-5dp"
+        android:weightSum="5">
 
-     <TextView
-         android:id="@+id/tvValidate"
-         android:layout_width="0dp"
-         android:layout_weight="5"
-         style="@style/TextStyleNormal.Large.Bold"
-         android:gravity="center"
-         android:clickable="false"
-         android:inputType="textCapCharacters"
-         android:text="@string/validate_card"
-         android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tvValidate"
+            style="@style/TextStyleNormal.Large.Bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:clickable="false"
+            android:gravity="center"
+            android:text="@string/validate_card"
+            android:textAllCaps="true" />
+
         <ImageView
             android:id="@+id/imValid"
-            android:layout_toRightOf="@+id/tvValidate"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:clickable="false"
             android:layout_gravity="center"
-            android:src="@drawable/ic_arrowup"/>
+            android:layout_toRightOf="@+id/tvValidate"
+            android:clickable="false"
+            android:src="@drawable/ic_arrowup" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/llIssueCard"
-        android:layout_below="@+id/llValidate"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_below="@+id/llValidate"
         android:layout_centerHorizontal="true"
-        android:weightSum="5"
-        android:paddingRight="-5dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:background="@drawable/edittext_shap"
-        >
+        android:paddingRight="-5dp"
+        android:weightSum="5">
 
         <TextView
             android:id="@+id/tvIssuedate"
-            android:layout_width="0dp"
-            android:layout_weight="5"
             style="@style/TextStyleNormal.Large.Bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
             android:gravity="center"
-            android:inputType="textCapCharacters"
             android:text="@string/issue_card"
-            android:layout_height="match_parent" />
+            android:textAllCaps="true" />
+
         <ImageView
             android:id="@+id/imIssue"
-            android:layout_toRightOf="@+id/tvValidate"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_arrowdown"/>
+            android:layout_toRightOf="@+id/tvValidate"
+            android:src="@drawable/ic_arrowdown" />
 
     </LinearLayout>
 
-    
+
 </RelativeLayout>

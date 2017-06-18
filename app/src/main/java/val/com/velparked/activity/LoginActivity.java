@@ -125,7 +125,12 @@ public class LoginActivity extends BaseActivity {
         params.put(Constant.USERNAME, userName);
         params.put(Constant.PASSWORD, password);
         params.put(Constant.USER_TYPE, userType);
+
+        if (userType.equals("1"))
+        params.put(Constant.FCM, getValApplication().getFCMRegId());
+
         params.put(Constant.DEVICE_ID, Utils.getDeviceId(this));
+
         Log.e(TAG,params.toString());
         requestProgress("Login", "Please wait ...");
         RestApiCalls.getLogin(params).enqueue(new Callback<Login>() {
@@ -135,6 +140,7 @@ public class LoginActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null) {
 
                     Login login = response.body();
+                    Log.e("Login",login.toString());
                     if (login.getStatus() && login.getUserDetails() != null) {
 
 

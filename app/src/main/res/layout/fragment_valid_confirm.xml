@@ -3,6 +3,7 @@
     style="@style/LayoutHeightWrapWidthMatchStyling.Padding"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="val.com.velparked.fragment.ValidateConfirmFragment">
 
     <TextView

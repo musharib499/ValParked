@@ -3,6 +3,7 @@
     style="@style/LayoutHeightWrapWidthMatchStyling.Padding"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="val.com.velparked.fragment.ValidateConfirmFragment">
 
     <TextView
@@ -12,7 +13,7 @@
 
     <TextView
         android:id="@+id/tvCarNo"
-        style="@style/TextStyleNormal.Large30.margin" />
+        style="@style/TextStyleNormal.Large30.borderColor" />
 
     <TextView
         style="@style/TextStyleNormal"

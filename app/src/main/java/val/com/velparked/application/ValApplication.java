@@ -86,4 +86,13 @@ public class ValApplication extends Application {
         };
 //        }
     }
+
+    public String getFCMRegId() {
+        String gcmID = "";
+        if (mFcmRegister != null && mFcmRegister.getRegistrationId(this) != null) {
+            gcmID = mFcmRegister.getRegistrationId(this);
+            Log.d("Token",gcmID);
+        }
+        return gcmID;
+    }
 }

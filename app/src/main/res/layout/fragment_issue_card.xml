@@ -1,21 +1,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/background"
     android:layout_height="match_parent"
     tools:context="val.com.velparked.fragment.IssueCardFragment">
 
 
   <EditText
       android:id="@+id/etCarNo"
-      style="@style/TextStyleNormal.Large.Bold"
+      style="@style/TextStyleNormal.placeholderColor"
       android:layout_width="match_parent"
       android:layout_marginTop="@dimen/margin_25dp"
       android:layout_marginRight="@dimen/margin_20dp"
       android:layout_marginLeft="@dimen/margin_20dp"
       android:inputType="textCapCharacters"
-      android:maxLength="12"
+      android:maxLength="10"
       android:background="@drawable/edittext_shap"
-      android:padding="@dimen/padding_large"
       android:gravity="center"
       android:hint="@string/enter_vehicle_no"/>
 

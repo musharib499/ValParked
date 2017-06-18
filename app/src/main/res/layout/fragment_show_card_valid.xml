@@ -14,8 +14,7 @@
         android:keepScreenOn="true"
         android:visibility="visible"
         android:text="@string/app_name"
-        android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_large30" />
+        style="@style/TextStyleNormal.Large30.borderColor" />
 
     <LinearLayout
         android:id="@+id/llShowCard"
@@ -28,7 +27,7 @@
         <TextView
             android:id="@+id/tvShow"
             style="@style/TextStyleNormal"
-            android:textSize="@dimen/text_size_large30"
+            android:textSize="@dimen/text_size_large"
             android:text="@string/show_card"
             />
 
