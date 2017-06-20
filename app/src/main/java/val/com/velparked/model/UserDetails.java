@@ -13,6 +13,8 @@ public class UserDetails implements Parcelable
     private String email;
     private String phone;
     private String address;
+    private String hotelid;
+    private String phoneid;
 
 
     private String userType;
@@ -30,6 +32,8 @@ public class UserDetails implements Parcelable
             instance.email = ((String) in.readValue((String.class.getClassLoader())));
             instance.phone = ((String) in.readValue((String.class.getClassLoader())));
             instance.address = ((String) in.readValue((String.class.getClassLoader())));
+            instance.hotelid = ((String) in.readValue((String.class.getClassLoader())));
+            instance.phoneid = ((String) in.readValue((String.class.getClassLoader())));
             instance.userType = ((String) in.readValue((String.class.getClassLoader())));
             return instance;
         }
@@ -49,7 +53,21 @@ public class UserDetails implements Parcelable
         this.userType = userType;
     }
 
+    public String getHotelid() {
+        return hotelid;
+    }
 
+    public void setHotelid(String hotelid) {
+        this.hotelid = hotelid;
+    }
+
+    public String getPhoneid() {
+        return phoneid;
+    }
+
+    public void setPhoneid(String phoneid) {
+        this.phoneid = phoneid;
+    }
     public String getUserid() {
         return userid;
     }
@@ -106,6 +124,8 @@ public class UserDetails implements Parcelable
         dest.writeValue(phone);
         dest.writeValue(address);
         dest.writeValue(userType);
+        dest.writeValue(hotelid);
+        dest.writeValue(phoneid);
 
     }
 

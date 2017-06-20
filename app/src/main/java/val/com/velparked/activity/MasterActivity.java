@@ -1,5 +1,6 @@
 package val.com.velparked.activity;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +12,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
@@ -37,6 +35,7 @@ import val.com.velparked.model.Parking;
 import val.com.velparked.model.ParkingInfo;
 import val.com.velparked.retrofit.RestApiCalls;
 import val.com.velparked.utils.Constant;
+import val.com.velparked.utils.ProgressCommonDialog;
 import val.com.velparked.utils.Utils;
 import val.com.velparked.viewholder.ParkingVewHolder;
 
@@ -53,7 +52,8 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
     private List<ParkingInfo> parking = null;
     private RecyclerView recyclerView;
     private TextView emptyView;
-    private boolean status=false;
+    private boolean status = false;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
                 }
             }
         });
-
+        progressDialog = ProgressCommonDialog.progressDialog(this, "", "");
         if (isConnected(this)) {
             setLoadParking();
         }
@@ -77,13 +77,13 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
     }
 
     public void setData() {
-        Utils.recyclerView(recyclerView, this, true).setAdapter(new BaseAdapter<ParkingInfo, ParkingVewHolder>(this, getParking(), this, ParkingVewHolder.class, R.layout.parking_item));
+        Utils.recyclerView(recyclerView, this, true).setAdapter(new BaseAdapter<>(this, getParking(), this, ParkingVewHolder.class, R.layout.parking_item));
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-
         setTitleMessage("Parking");
         setNavigationHeader(navigationView);
         setNavigation();
@@ -101,36 +101,49 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
         if (!TextUtils.isEmpty(getParking().get(position).getVehicalNumber()))
             holder.tvCarNo.setText(getParking().get(position).getVehicalNumber());
 
-        if (!TextUtils.isEmpty(getParking().get(position).getStatus()) && getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
-        {
+        if (!TextUtils.isEmpty(getParking().get(position).getStatus()) && getParking().get(position).getStatus().equalsIgnoreCase("Requested")) {
             holder.tvCarNo.setTextColor(getResources().getColor(R.color.red));
             holder.llPopupView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.tvCarNo.setTextColor(getResources().getColor(R.color.border));
             holder.llPopupView.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(getParking().get(position).getParkTime()))
-            holder.tvIn.setText(setColorSpan(getString(R.string.in), (getParking().get(position).getParkTime() != null ? getParking().get(position).getParkTime() : "...")), TextView.BufferType.SPANNABLE);
+        /*if (!TextUtils.isEmpty(getParking().get(position).getParkTime()))*/
+        StringBuilder inTime = new StringBuilder();
+        inTime.append(setColorSpan(getString(R.string.in), (!TextUtils.isEmpty(getParking().get(position).getParkTime()) ? getParking().get(position).getParkTime() : getString(R.string.dot_string))));
+        if (!TextUtils.isEmpty(getParking().get(position).getParkDate()))
+            inTime.append("\n").append((getParking().get(position).getParkDate()));
 
-        if (!TextUtils.isEmpty(getParking().get(position).getRequestTime()))
-            holder.tvReq.setText(setColorSpan(getString(R.string.req), (getParking().get(position).getRequestTime() != null ? getParking().get(position).getRequestTime() : "...")), TextView.BufferType.SPANNABLE);
+        holder.tvIn.setText(inTime, TextView.BufferType.SPANNABLE);
 
-        if (!TextUtils.isEmpty(getParking().get(position).getPickedTime()))
-            holder.tvOut.setText(setColorSpan(getString(R.string.out), (getParking().get(position).getPickedTime() != null ? getParking().get(position).getPickedTime() : "...")), TextView.BufferType.SPANNABLE);
+        StringBuilder reqTime = new StringBuilder();
+        reqTime.append(setColorSpan(getString(R.string.req), (!TextUtils.isEmpty(getParking().get(position).getRequestTime()) ? getParking().get(position).getRequestTime() : getString(R.string.dot_string))));
+        if (!TextUtils.isEmpty(getParking().get(position).getParkDate()))
+            reqTime.append("\n").append((getParking().get(position).getRequestDate()));
+
+        holder.tvReq.setText(reqTime, TextView.BufferType.SPANNABLE);
+
+        StringBuilder inOut = new StringBuilder();
+        inOut.append(setColorSpan(getString(R.string.out), (!TextUtils.isEmpty(getParking().get(position).getPickedTime()) ? getParking().get(position).getPickedTime() : getString(R.string.dot_string))));
+        if (!TextUtils.isEmpty(getParking().get(position).getParkDate()))
+            inOut.append("\n").append((getParking().get(position).getPickedDate()));
+
+        holder.tvOut.setText(inOut, TextView.BufferType.SPANNABLE);
 
         if (!TextUtils.isEmpty(getParking().get(position).getStatus())) {
 
             if (getParking().get(position).getStatus().equalsIgnoreCase("Parked"))
                 holder.imIcon.setImageResource(R.drawable.ic_sedan_car_model);
 
-           if (getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
+            if (getParking().get(position).getStatus().equalsIgnoreCase("Requested"))
                 holder.imIcon.setImageResource(R.drawable.ic_check_circle_red);
 
             if (getParking().get(position).getStatus().equalsIgnoreCase("Delivered"))
                 holder.imIcon.setImageResource(R.drawable.ic_check_circle_green);
         }
     }
+
 
     @Override
     protected void onDestroy() {
@@ -139,16 +152,18 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
     }
 
     private void setLoadParking() {
-        if (!showProgress(this,"").isShowing())
-            showProgress(this,"Parking Loading....");
-
+        Login login = getValApplication().getLoginResponse();
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+        // porgrassBarShow();
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constant.USER_ID, "1"/*login.getUserDetails().getUserid()*/);
+        params.put(Constant.USER_ID, login.getUserDetails().getUserid());
         RestApiCalls.getParking(params).enqueue(new Callback<Parking>() {
             @Override
             public void onResponse(Call<Parking> call, Response<Parking> response) {
-                hideProgress();
-                status=true;
+                hidePProgress();
+                // progress.dismiss();
+                status = true;
                 if (response.isSuccessful() && response.body() != null) {
                     Parking parking = response.body();
                     if (parking.getStatus() && parking.getParkingInfo().size() != 0) {
@@ -177,22 +192,23 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
 
             @Override
             public void onFailure(Call<Parking> call, Throwable t) {
-                hideProgress();
-                status=true;
+                hidePProgress();
+                // progress.dismiss();
+                status = true;
                 Toast.makeText(MasterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
-    private Spanned getColoredSpanned(String text) {
-        String input = "<font color=" + R.color.gray + ">" + text + "</font>";
-        return Html.fromHtml("<![CDATA[<font color='#145A14'> + text + </font>]]>");
-    }
-
-    public Spannable setColor(String s) {
-        Spannable wordtoSpan = new SpannableString(s);
-        wordtoSpan.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return wordtoSpan;
+    protected void hidePProgress() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            try {
+                progressDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private SpannableStringBuilder setColorSpan(String s, String s1) {
@@ -223,12 +239,11 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
 
         switch (item.getItemId()) {
             case R.id.action_logout:
-                if (isConnected(this) || status)
-                      setLoadParking();
+                if (isConnected(this) || status) {
+                    status = false;
+                    setLoadParking();
+                }
 
-                return true;
-            case android.R.id.home:
-               onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -261,12 +276,14 @@ public class MasterActivity extends BaseActivity implements BaseAdapter.BindAdap
     }
 
 
-
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isConnected(MasterActivity.this) || status) {
-                setLoadParking();
+            if (intent.getStringExtra(Constant.NOTIFICATION) != null && intent.getStringExtra(Constant.FCM).equals("1")) {
+                if (isConnected(MasterActivity.this) || status) {
+                    status = false;
+                    setLoadParking();
+                }
             }
         }
     };

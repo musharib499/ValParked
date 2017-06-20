@@ -9,8 +9,11 @@ public class ParkingInfo implements Parcelable
 
     private String vehicalNumber;
     private String parkTime;
+    private String parkDate;
     private String requestTime;
+    private String requestDate;
     private String pickedTime;
+    private String pickedDate;
     private String status;
     public final static Creator<ParkingInfo> CREATOR = new Creator<ParkingInfo>() {
 
@@ -22,8 +25,11 @@ public class ParkingInfo implements Parcelable
             ParkingInfo instance = new ParkingInfo();
             instance.vehicalNumber = ((String) in.readValue((String.class.getClassLoader())));
             instance.parkTime = ((String) in.readValue((String.class.getClassLoader())));
+            instance.parkDate = ((String) in.readValue((String.class.getClassLoader())));
             instance.requestTime = ((String) in.readValue((String.class.getClassLoader())));
+            instance.requestDate = ((String) in.readValue((String.class.getClassLoader())));
             instance.pickedTime = ((String) in.readValue((String.class.getClassLoader())));
+            instance.pickedDate = ((String) in.readValue((String.class.getClassLoader())));
             instance.status = ((String) in.readValue((String.class.getClassLoader())));
             return instance;
         }
@@ -34,6 +40,32 @@ public class ParkingInfo implements Parcelable
 
     }
     ;
+
+
+
+    public String getParkDate() {
+        return parkDate;
+    }
+
+    public void setParkDate(String parkDate) {
+        this.parkDate = parkDate;
+    }
+
+    public String getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(String requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    public String getPickedDate() {
+        return pickedDate;
+    }
+
+    public void setPickedDate(String pickedDate) {
+        this.pickedDate = pickedDate;
+    }
 
     public String getVehicalNumber() {
         return vehicalNumber;
@@ -78,8 +110,11 @@ public class ParkingInfo implements Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(vehicalNumber);
         dest.writeValue(parkTime);
+        dest.writeValue(parkDate);
         dest.writeValue(requestTime);
+        dest.writeValue(requestDate);
         dest.writeValue(pickedTime);
+        dest.writeValue(pickedDate);
         dest.writeValue(status);
     }
 

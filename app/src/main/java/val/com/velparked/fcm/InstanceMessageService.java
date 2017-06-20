@@ -41,13 +41,15 @@ public class InstanceMessageService extends FirebaseMessagingService {
 
         JSONObject object = new JSONObject(remoteMessage.getData());
         Log.e("Notification",object.toString());
-        Intent intent = new Intent(Constant.FCM_MASTER);
-        // add data
-        intent.putExtra(Constant.NOTIFICATION, remoteMessage.getData().toString());
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         try {
             sendNotification(object);
+            Intent intent = new Intent(Constant.FCM_MASTER);
+            // add data
+            intent.putExtra(Constant.FCM, "1");
+            intent.putExtra(Constant.NOTIFICATION, remoteMessage.getData().toString());
+
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -64,10 +66,9 @@ public class InstanceMessageService extends FirebaseMessagingService {
 
     private void sendNotification(JSONObject messageBody) throws JSONException {
         Intent intent = new Intent(this, MasterActivity.class);
-        intent.putExtra("msg",messageBody.getString("message").toString());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)

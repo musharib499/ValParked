@@ -79,6 +79,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
                 progressDialog.dismiss();
             } catch (Exception e) {
                 e.printStackTrace();
+                progressDialog.dismiss();
             }
         }
     }
@@ -311,8 +312,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
         UserDetails details=getValApplication().getLoginResponse().getUserDetails();
         if (details!=null)
         {
-            tvHotelId.setText("Hotel Id : " + (details.getUserid()!=null ? details.getUserid():""));
-            tvDeviceId.setText("Device Id : "+String.valueOf(details.getDeviceID()!=null ? details.getDeviceID():""));
+            tvHotelId.setText("Hotel Id : " + (details.getHotelid()!=null ? details.getHotelid():""));
+            tvDeviceId.setText("Device Id : "+String.valueOf(details.getPhoneid()!=null ? details.getPhoneid():""));
             tvName.setText(details.getUserid()!=null ? details.getName():"");
             tvVersion.setText("Version " + BuildConfig.VERSION_NAME);
 
@@ -323,10 +324,9 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     protected void setLogOut()
     {
         HashMap<String,String> params = new HashMap<>();
-        if (!progressDialog.isShowing())
-             showProgress("Logout");
-
+        showProgress("Logout");
         params.put(Constant.USER_ID,getValApplication().getLoginResponse().getUserDetails().getUserid());
+        params.put(Constant.DEVICE_FID,String.valueOf(getValApplication().getLoginResponse().getUserDetails().getDeviceID()));
         RestApiCalls.getLogOut(params).enqueue(new Callback<BaseResponseModel>() {
             @Override
             public void onResponse(Call<BaseResponseModel> call, Response<BaseResponseModel> response) {
@@ -352,7 +352,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     }
     @Override
     public void onBackPressed() {
-        hideProgress();
         if (fragmentManager.getBackStackEntryCount() > 0) {
 
             fragmentManager.popBackStack();

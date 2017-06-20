@@ -17,6 +17,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -29,11 +30,8 @@ import val.com.velparked.nfcReader.NfcReader;
 import val.com.velparked.utils.Constant;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
     private NdefMessage mNdefPushMessage;
-    private AlertDialog mDialog;
     private Context context = this;
     private DrawerLayout drawer;
     private UpdateUIAdapter uiAdapter;
@@ -110,9 +108,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setNfcPauseDisconnect(Activity context) {
         super.setNfcPauseDisconnect(context);
-        if (mAdapter != null) {
-            mAdapter.disableForegroundDispatch(context);
-            mAdapter.disableForegroundNdefPush(context);
+        if (NfcAdapter.getDefaultAdapter(context) != null) {
+            NfcAdapter.getDefaultAdapter(context).disableForegroundDispatch(context);
+            NfcAdapter.getDefaultAdapter(context).disableForegroundNdefPush(context);
         }
 
     }
@@ -120,37 +118,45 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setNfcResumeConnect(Activity context) {
         super.setNfcResumeConnect(context);
-        if (mAdapter != null) {
-            if (!mAdapter.isEnabled()) {
+        if (NfcAdapter.getDefaultAdapter(context) != null) {
+            if (!NfcAdapter.getDefaultAdapter(context).isEnabled()) {
                 showWirelessSettingsDialog();
             }
-            mAdapter.enableForegroundDispatch(context, mPendingIntent, null, null);
-            mAdapter.enableForegroundNdefPush(context, mNdefPushMessage);
+            NfcAdapter.getDefaultAdapter(context).enableForegroundDispatch(context, mPendingIntent, null, null);
+            NfcAdapter.getDefaultAdapter(context).enableForegroundNdefPush(context, mNdefPushMessage);
         }
     }
 
-    private void showMessage(int title, int message) {
+  /*  private void showMessage(int title, int message) {
         mDialog.setTitle(title);
         mDialog.setMessage(getText(message));
         mDialog.show();
-    }
+    }*/
 
     private void showWirelessSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.nfc_disabled);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                startActivity(intent);
+                   finish();
+                 // startNfcSettingsActivity();
             }
         });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+      /*  builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
-        });
+        });*/
         builder.create().show();
         return;
+    }
+
+    protected void startNfcSettingsActivity() {
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
+        } else {
+            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+        }
     }
 
     @Override
@@ -158,12 +164,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         super.setStartNfc(context);
 
         NfcReader.getInstance(this).resolveIntent(getIntent());
-        mDialog = new AlertDialog.Builder(context).setNeutralButton("Ok", null).create();
+     AlertDialog   mDialog = new AlertDialog.Builder(context).setNeutralButton("Ok", null).create();
 
-        mAdapter = NfcAdapter.getDefaultAdapter(context);
-        if (mAdapter == null) {
-            showMessage(R.string.error, R.string.no_nfc);
-            finish();
+        if (NfcAdapter.getDefaultAdapter(context) == null) {
+            mDialog.setTitle(R.string.error);
+            mDialog.setMessage(getText(R.string.no_nfc));
+            mDialog.show();
+            //Toast.makeText(this, R.string.no_nfc, Toast.LENGTH_SHORT).show();
+            //finish();
             return;
         }
         mPendingIntent = PendingIntent.getActivity(context, 0,
