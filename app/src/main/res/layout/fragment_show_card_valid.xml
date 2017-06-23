@@ -33,11 +33,11 @@
 
         <ImageView
             android:id="@+id/imIssueCardCheck"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
-            android:src="@drawable/ic_tap_yellow" />
+            android:src="@drawable/tapcard" />
 
         <TextView
             android:id="@+id/tvError"

@@ -138,15 +138,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         builder.setMessage(R.string.nfc_disabled);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                   finish();
-                 // startNfcSettingsActivity();
+                startNfcSettingsActivity();
             }
         });
-      /*  builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+                dialogInterface.dismiss();
             }
-        });*/
+        });
         builder.create().show();
         return;
     }

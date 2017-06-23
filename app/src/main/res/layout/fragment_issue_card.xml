@@ -1,23 +1,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/background"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="val.com.velparked.fragment.IssueCardFragment">
 
 
-  <EditText
-      android:id="@+id/etCarNo"
-      style="@style/TextStyleNormal.placeholderColor"
-      android:layout_width="match_parent"
-      android:layout_marginTop="@dimen/margin_25dp"
-      android:layout_marginRight="@dimen/margin_20dp"
-      android:layout_marginLeft="@dimen/margin_20dp"
-      android:digits="@string/digits"
-      android:inputType="textFilter|textCapCharacters"
-      android:maxLength="10"
-      android:background="@drawable/edittext_shap"
-      android:gravity="center"
-      android:hint="@string/enter_vehicle_no"/>
+    <EditText
+        android:id="@+id/etCarNo"
+        style="@style/TextStyleNormal.placeholderColor"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/margin_20dp"
+        android:layout_marginRight="@dimen/margin_20dp"
+        android:layout_marginTop="@dimen/margin_25dp"
+        android:background="@drawable/edittext_shap"
+        android:digits="@string/digits"
+        android:gravity="center"
+        android:hint="@string/enter_vehicle_no"
+        android:imeActionLabel="Done"
+        android:inputType="textFilter|textCapCharacters"
+        android:maxLength="10"
+        android:singleLine="true" />
 
 </FrameLayout>

@@ -20,33 +20,35 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" >
+        app:menu="@menu/activity_main_drawer">
 
-   <!--     <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/padding_medium"
-            android:clickable="true"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_medium">
+
+            <TextView
+                android:id="@+id/tvIEMI"
+                style="@style/TextStyleNormal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/logout"
-                android:background="@drawable/button_shap"/>-->
+                android:layout_gravity="center_horizontal|bottom"
+                android:paddingBottom="@dimen/padding_medium"
+                android:paddingLeft="@dimen/padding_large" />
 
             <TextView
                 android:id="@+id/tvVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_gravity="center_horizontal|bottom"
+                android:gravity="center"
                 android:paddingBottom="@dimen/padding_medium"
                 android:text="Version Code" />
 
-      <!--  </LinearLayout>-->
+        </LinearLayout>
 
     </app:android.support.design.widget.NavigationView>
 

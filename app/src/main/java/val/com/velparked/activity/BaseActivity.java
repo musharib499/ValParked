@@ -1,18 +1,22 @@
 package val.com.velparked.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,6 +46,7 @@ import val.com.velparked.model.UserDetails;
 import val.com.velparked.retrofit.RestApiCalls;
 import val.com.velparked.utils.Constant;
 import val.com.velparked.utils.ProgressCommonDialog;
+import val.com.velparked.utils.TelephonyInfo;
 
 public class BaseActivity extends AppCompatActivity implements FragmentAdapter, NavigationView.OnNavigationItemSelectedListener {
     private FragmentManager fragmentManager;
@@ -216,6 +221,29 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
     }
 
 
+    public String getIMEI(Context context){
+        StringBuilder builder=new StringBuilder();
+
+            TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(this);
+
+            String imsiSIM1 = telephonyInfo.getImsiSIM1();
+            String imsiSIM2 = telephonyInfo.getImsiSIM2();
+
+
+            if (!TextUtils.isEmpty(imsiSIM1)) {
+                builder.append("IEMI : " + imsiSIM1);
+
+            }
+            if (!TextUtils.isEmpty(imsiSIM2)) {
+                builder.append("\n").append("IEMI : " + imsiSIM2);
+
+            }
+
+        return builder.toString();
+
+    }
+
+
     @Override
     public void setNfcResumeConnect(Activity context) {
 
@@ -289,6 +317,14 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
         TextView tvDeviceId=(TextView) header.findViewById(R.id.tvDeviceId);
         TextView tvName=(TextView) header.findViewById(R.id.tvName);
         TextView tvVersion=(TextView) findViewById(R.id.tvVersion);
+        TextView tvIEMI=(TextView) findViewById(R.id.tvIEMI);
+        if (isPhoneStatusPermissionGranted())
+            tvIEMI.setText(getIMEI(this));
+
+       /* }else {
+            requestPermission();
+        }*/
+
        // Button btnLogout=(Button) findViewById(R.id.btnLogout);
         ImageView imageView=(ImageView) header.findViewById(R.id.imgBack);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -309,6 +345,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
             }
         });
 */
+
         UserDetails details=getValApplication().getLoginResponse().getUserDetails();
         if (details!=null)
         {
@@ -319,6 +356,26 @@ public class BaseActivity extends AppCompatActivity implements FragmentAdapter, 
 
         }
 
+    }
+
+    private boolean isPhoneStatusPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                    == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                //Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                // Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+                return false;
+            }
+
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            //Log.v(TAG,"Permission is granted");
+            return true;
+        }
     }
 
     protected void setLogOut()
