@@ -3,6 +3,7 @@ package val.com.velparked.application;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
@@ -19,7 +20,7 @@ import val.com.velparked.utils.Constant;
  * Created by User on 6/4/2017.
  */
 
-public class ValApplication extends Application {
+public class ValApplication extends MultiDexApplication {
     private ComplexPreferences complexPreferences = null;
     private Login login;
     private FCMRegister mFcmRegister;
@@ -34,6 +35,8 @@ public class ValApplication extends Application {
 
 
     }
+
+
     public Login getLoginResponse() {
         if (login == null ) {
             login = complexPreferences.getObject(Constant.LOGIN_KEY, Login.class);

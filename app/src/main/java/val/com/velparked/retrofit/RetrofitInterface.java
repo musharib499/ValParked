@@ -33,6 +33,9 @@ public interface RetrofitInterface {
     @GET("issue_card.php")
     Call<ValidCardInfo> getIssueCard(@QueryMap Map<String, String> params);
 
+    @GET("issue_number.php")
+    Call<ValidCardInfo> getIssueCardNumber(@QueryMap Map<String, String> params);
+
     @GET("call_vehical.php")
     Call<CallMyCar> getCallVehicle(@QueryMap Map<String, String> params);
 

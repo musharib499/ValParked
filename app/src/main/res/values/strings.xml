@@ -31,9 +31,9 @@
     <string name="nfc_disabled">NFC is not enabled. Please go to the wireless settings to enable it.</string>
     <string name="verify_car_no">Please verify the Car No.</string>
     <string name="cancel">CANCEL</string>
-    <string name="show_card">Show Card </string>
+    <string name="show_card">Show Card or Mobile number </string>
     <string name="show_valet_card">Show Valet Card </string>
-    <string name="show_card_here">Show Card here</string>
+    <string name="show_card_here">Show Card or Mobile number here</string>
     <string name="call_car">CALL YOUR CAR</string>
     <string name="card_not_found">Card not found. Please try again</string>
     <string name="try_another_card">Try another Card</string>
@@ -53,6 +53,8 @@
     <string name="next">NEXT</string>
     <string name="invalidup">Invalid username and password.</string>
     <string name="digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890</string>
+    <string name="digits_number">1234567890</string>
+    <string name="please_enter_mobile_number">Please Enter Mobile Number.</string>
 
 
 </resources>

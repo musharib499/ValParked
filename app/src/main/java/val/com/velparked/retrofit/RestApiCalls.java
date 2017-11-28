@@ -60,6 +60,9 @@ public class RestApiCalls {
     public static Call<ValidCardInfo> getIssueCard(HashMap<String, String> params) {
         return getRetrofitApi().getIssueCard(params);
     }
+    public static Call<ValidCardInfo> getIssueCardNumber(HashMap<String, String> params) {
+        return getRetrofitApi().getIssueCardNumber(params);
+    }
     public static Call<CallMyCar> getCallVehicle(HashMap<String, String> params) {
         return getRetrofitApi().getCallVehicle(params);
     }

@@ -33,11 +33,28 @@
 
         <ImageView
             android:id="@+id/imIssueCardCheck"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginBottom="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:src="@drawable/tapcard" />
+
+        <EditText
+            android:id="@+id/etMobileNumber"
+            style="@style/TextStyleNormal.placeholderColor"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/margin_20dp"
+            android:layout_marginRight="@dimen/margin_20dp"
+            android:layout_marginTop="@dimen/margin_25dp"
+            android:background="@drawable/edittext_shap"
+            android:digits="@string/digits_number"
+            android:gravity="center"
+            android:hint="@string/please_enter_mobile_number"
+            android:imeActionLabel="Done"
+            android:visibility="gone"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/tvError"

@@ -5,13 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -71,12 +75,44 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
     private void issueView(View view) {
         tvShow = (TextView) view.findViewById(R.id.tvShow);
         tvCarNo = (TextView) view.findViewById(R.id.tvCarNo);
+        final EditText etMobileNumber=(EditText) view.findViewById(R.id.etMobileNumber);
+        etMobileNumber.setVisibility(View.VISIBLE);
         tvCarNo.setText(number);
         tvShow.setText(getResources().getString(R.string.show_card_here));
         //tvShow.setTextSize(getResources().getDimension(R.dimen.text_size_small));
         tvShow.setTextColor(ContextCompat.getColor(getActivity(), R.color.error_color));
         tvError = (TextView) view.findViewById(R.id.tvError);
         btnNext = getFragmentAdapter().setFooter(getString(R.string.park_vehicle), false);
+
+        etMobileNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+               // Toast.makeText(getActivity(), "before "+count, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (etMobileNumber.getText().toString().length()>=10) {
+
+                    btnNext = getFragmentAdapter().setFooter(getString(R.string.next), true);
+                   // btnNext.setEnabled(false);
+                    btnNext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setIssueValidNumber(etMobileNumber.getText().toString(), number);
+                        }
+                    });
+                }
+              //  Toast.makeText(getActivity(), "before "+count, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // btnNext.setEnabled(false);
 
     }
@@ -99,6 +135,37 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
         tvError = (TextView) view.findViewById(R.id.tvError);
         btnNext = getFragmentAdapter().setFooter(getString(R.string.next), true);
         btnNext.setEnabled(false);
+        final EditText etMobileNumber=(EditText) view.findViewById(R.id.etMobileNumber);
+        etMobileNumber.setVisibility(View.VISIBLE);
+        etMobileNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Toast.makeText(getActivity(), "before "+count, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (etMobileNumber.getText().toString().length()>=10) {
+
+                     btnNext.setEnabled(true);
+                    btnNext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setValid(etMobileNumber.getText().toString());
+                        }
+                    });
+                }
+                //  Toast.makeText(getActivity(), "before "+count, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
     }
 
@@ -290,6 +357,59 @@ public class NfcRederCardFragment extends BaseFragment implements UpdateUIAdapte
         Log.e("nfc", params.toString());
 
         RestApiCalls.getIssueCard(params).enqueue(new Callback<ValidCardInfo>() {
+            @Override
+            public void onResponse(Call<ValidCardInfo> call, Response<ValidCardInfo> response) {
+                hideProgress();
+                ValidCardInfo validCardInfo = response.body();
+                Log.e("Issue", response.toString());
+                if (response.isSuccessful() && response.body() != null) {
+                    if (validCardInfo.getStatus()) {
+
+                        //   if (validCardInfo.cardInfo.getVehicalNumber()!=null)
+                     /*   btnNext.setEnabled(true);
+                        btnNext.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getFragmentAdapter().addToBackStack(IssueCardConfirmFragment.newInstance(vehicle));
+                            }
+                        });*/
+                        getFragmentAdapter().addToBackStack(IssueCardConfirmFragment.newInstance(vehicle));
+
+
+                        tvError.setText(validCardInfo.getMessage());
+
+                    } else {
+                        tvError.setText(R.string.card_not_found);
+                    }
+                } else {
+                    Log.e(TAG, response.message());
+                    tvError.setText(response.message());
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ValidCardInfo> call, Throwable t) {
+                hideProgress();
+                tvError.setText("Something is wrong on server!");
+            }
+        });
+
+
+    }
+    public void setIssueValidNumber(String nfc, final String vehicle) {
+        Login login = getFragmentAdapter().getValApplication().getLoginResponse();
+        showProgress("Checking......");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constant.USER_ID, login.getUserDetails().getUserid());
+        params.put(Constant.VEHICLE_ID, vehicle);
+        params.put(Constant.NCF_ID, nfc);
+        params.put(Constant.DEVICE_FID, login.getUserDetails().getDeviceID().toString());
+        Log.e("nfc", params.toString());
+
+        RestApiCalls.getIssueCardNumber(params).enqueue(new Callback<ValidCardInfo>() {
             @Override
             public void onResponse(Call<ValidCardInfo> call, Response<ValidCardInfo> response) {
                 hideProgress();
