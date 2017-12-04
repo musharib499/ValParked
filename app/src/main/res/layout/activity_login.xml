@@ -63,7 +63,7 @@
                 android:checked="true"
                 android:layout_weight="1"
                 style="@style/TextStyleNormal.Radio"
-                android:text="Velet" />
+                android:text="@string/valet" />
 
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/radioMaster"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                style="@style/TextStyleNormal.Radio"
-                android:text="Parking Master" />
+                android:text="@string/parking_master" />
         </RadioGroup>
 
         <Button

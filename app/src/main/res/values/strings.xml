@@ -55,6 +55,8 @@
     <string name="digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="digits_number">1234567890</string>
     <string name="please_enter_mobile_number">Please Enter Mobile Number.</string>
+    <string name="valet">Valet</string>
+    <string name="parking_master">Parking Master</string>
 
 
 </resources>
